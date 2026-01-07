@@ -1,3 +1,3 @@
 <template>
-  <NuxtPage />
+  <TitleNavbar />
 </template>
