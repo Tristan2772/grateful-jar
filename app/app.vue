@@ -4,7 +4,7 @@ import AppTitleNavbar from "./components/app/title-navbar.vue";
 
 <template>
   <div class="flex flex-col h-screen">
-    <AppTitleNavbar class="flex-shrink-0" />
+    <AppTitleNavbar class="shrink-0" />
     <NuxtPage class="flex-1 overflow-hidden" />
   </div>
 </template>
