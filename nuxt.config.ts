@@ -9,6 +9,10 @@ export default defineNuxtConfig({
     "@nuxt/icon",
     "@nuxtjs/color-mode",
   ],
+  colorMode: {
+    preference: "system",
+    fallback: "light",
+  },
   css: ["~/assets/css/main.css"],
   eslint: {
     config: {
