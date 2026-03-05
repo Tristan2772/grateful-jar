@@ -14,11 +14,13 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@libsql/client": "^0.17.0",
     "@nuxt/eslint": "^1.12.1",
     "@nuxt/hints": "^1.0.0-alpha.5",
     "@nuxt/icon": "^2.2.0",
     "@nuxtjs/color-mode": "^4.0.0",
     "@tailwindcss/vite": "^4.1.18",
+    "drizzle-orm": "^0.45.1",
     "nuxt": "^4.2.2",
     "tailwindcss": "^4.1.18",
     "vue": "^3.5.26",
@@ -30,6 +32,7 @@
     "@iconify-json/tabler": "^1.2.26",
     "@types/node": "^25.3.3",
     "daisyui": "^5.5.14",
+    "drizzle-kit": "^0.31.9",
     "eslint": "^9.39.2",
     "eslint-plugin-format": "^1.2.0",
     "husky": "^9.1.7",
