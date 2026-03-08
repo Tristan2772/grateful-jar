@@ -14,12 +14,14 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@better-auth/drizzle-adapter": "^1.5.3",
     "@libsql/client": "^0.17.0",
     "@nuxt/eslint": "^1.12.1",
     "@nuxt/hints": "^1.0.0-alpha.5",
     "@nuxt/icon": "^2.2.0",
     "@nuxtjs/color-mode": "^4.0.0",
     "@tailwindcss/vite": "^4.1.18",
+    "better-auth": "^1.5.3",
     "drizzle-orm": "^0.45.1",
     "nuxt": "^4.2.2",
     "tailwindcss": "^4.1.18",
