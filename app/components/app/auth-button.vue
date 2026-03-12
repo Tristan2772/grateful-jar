@@ -1,21 +1,11 @@
 <script lang="ts" setup>
-const signedIn = ref(false);
+const authStore = useAuthStore();
 </script>
 
 <template>
-  <div v-if="!signedIn">
-    <button class="btn btn-ghost">
-      Sign In
-    </button>
-  </div>
-  <div v-if="signedIn">
-    <div class="dropdown dropdown-end">
-      <div tabindex="0" role="button" class="btn m-1 btn-ghost">
-        Click  ⬇️
-      </div>
-      <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-        <li>Log out</li>
-      </ul>
-    </div>
-  </div>
+  <button :disabled="authStore.loading" class="btn btn-secondary" @click="authStore.signIn">
+    Sign in with Google
+    <span v-if="authStore.loading" class="loading loading-spinner loading-md" />
+    <Icon v-else-if="!authStore.loading" name="tabler:brand-google" size="24" />
+  </button>
 </template>

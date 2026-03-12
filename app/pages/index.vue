@@ -8,9 +8,7 @@
         <p class="py-6">
           Write out what you are grateful for and collect those memories in grateful jars. Come back to remind yourself that there is plenty to be grateful for!
         </p>
-        <button class="btn btn-accent min-w-50">
-          View Jars
-        </button>
+        <AppAuthButton />
       </div>
     </div>
   </div>
