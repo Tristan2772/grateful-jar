@@ -1,11 +1,7 @@
-<script lang="ts" setup>
-import AppTitleNavbar from "../components/app/title-navbar.vue";
-</script>
-
 <template>
   <div class="flex flex-col min-h-screen">
     <AppTitleNavbar />
-    <main>
+    <main class="flex-1 flex flex-col">
       <slot />
     </main>
   </div>
