@@ -1,16 +1,26 @@
 <script lang="ts" setup>
-const isSidebarOpen = ref(true);
+const isSidebarOpen = ref(false);
+
+onMounted(() => {
+  isSidebarOpen.value = localStorage.getItem("isSidebarOpen") === "true";
+});
 
 function toggleSidebar() {
   isSidebarOpen.value = !isSidebarOpen.value;
+  localStorage.setItem("isSidebarOpen", isSidebarOpen.value.toString());
 }
 </script>
 
 <template>
   <div class="flex-1 flex">
-    <div class="bg-base-100" :class="{ 'w-64': isSidebarOpen, 'w-16': !isSidebarOpen }">
-      <div class="flex hover:bg-base-300 hover:cursor-pointer" :class="{ 'justify-center': !isSidebarOpen, 'justify-end': isSidebarOpen }">
-        <Icon :name="isSidebarOpen ? 'tabler:chevron-left' : 'tabler:chevron-right'" size="42" @click="toggleSidebar" />
+    <div class="bg-base-100 transition-all duration-300" :class="{ 'w-64': isSidebarOpen, 'w-16': !isSidebarOpen }">
+      <div class="flex p-2 hover:bg-base-300 hover:cursor-pointer" :class="{ 'justify-center': !isSidebarOpen, 'justify-end': isSidebarOpen }">
+        <Icon
+          :name="isSidebarOpen ? 'tabler:chevron-left' : 'tabler:chevron-right'"
+          size="32"
+          class="btn btn-ghost"
+          @click="toggleSidebar"
+        />
       </div>
       <div class="flex flex-col">
         <AppSidebarLink label="My Jars" link="/dashboard" :show-label="isSidebarOpen">
