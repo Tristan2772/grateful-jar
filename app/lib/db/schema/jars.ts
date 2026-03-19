@@ -1,4 +1,6 @@
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { createInsertSchema } from "drizzle-zod";
+import { z } from "zod";
 
 import { user } from "./auth";
 
@@ -7,7 +9,17 @@ export const jars = sqliteTable("jars", {
   name: text().notNull(),
   slug: text().notNull().unique(),
   description: text(),
+  // startedAt: int(),
+  // endedAt: int(),
   userId: int().notNull().references(() => user.id),
   createdAt: int().notNull().$default(() => Date.now()),
   updatedAt: int().notNull().$default(() => Date.now()).$onUpdate(() => Date.now()),
+});
+
+export const InsertJarSchema = createInsertSchema(jars, {
+  name: z.string().min(1).max(100),
+  description: z.string().max(1000).optional().nullable(),
+}).pick({
+  name: true,
+  description: true,
 });

@@ -6,10 +6,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     "@nuxt/eslint",
-    "@nuxt/hints",
     "@nuxt/icon",
     "@nuxtjs/color-mode",
     "@pinia/nuxt",
+    "@vee-validate/nuxt",
+    "nuxt-csurf",
   ],
   colorMode: {
     preference: "system",

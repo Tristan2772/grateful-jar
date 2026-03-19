@@ -34,7 +34,15 @@ onMounted(() => {
 <template>
   <label class="swap swap-rotate mx-4">
     <input v-model="isDark" type="checkbox">
-    <Icon name="tabler:sun" size="24px" class="swap-on" />
-    <Icon name="tabler:moon" size="24px" class="swap-off" />
+    <Icon
+      name="tabler:sun"
+      size="24px"
+      class="swap-on"
+    />
+    <Icon
+      name="tabler:moon"
+      size="24px"
+      class="swap-off"
+    />
   </label>
 </template>

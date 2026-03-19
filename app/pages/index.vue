@@ -13,7 +13,11 @@ const authStore = useAuthStore();
           Write out what you are grateful for and collect those memories in grateful jars. Come back to remind yourself that there is plenty to be grateful for!
         </p>
         <AppAuthButton v-if="!authStore.user" />
-        <NuxtLink v-if="authStore.user" to="/dashboard" class="btn btn-primary">
+        <NuxtLink
+          v-if="authStore.user"
+          to="/dashboard"
+          class="btn btn-primary"
+        >
           View Jars
         </NuxtLink>
       </div>
