@@ -23,7 +23,11 @@ function toggleSidebar() {
         />
       </div>
       <div class="flex flex-col">
-        <AppSidebarLink label="My Jars" link="/dashboard" :show-label="isSidebarOpen">
+        <AppSidebarLink
+          label="My Jars"
+          link="/dashboard"
+          :show-label="isSidebarOpen"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -41,15 +45,25 @@ function toggleSidebar() {
             </g>
           </svg>
         </AppSidebarLink>
-        <AppSidebarLink label="New Jar" link="/dashboard/add" :show-label="isSidebarOpen">
+        <AppSidebarLink
+          label="New Jar"
+          link="/dashboard/add"
+          :show-label="isSidebarOpen"
+        >
           <Icon name="tabler:plus" size="24" />
         </AppSidebarLink>
         <div class="divider" />
-        <AppSidebarLink label="Sign Out" link="/sign-out" :show-label="isSidebarOpen">
+        <AppSidebarLink
+          label="Sign Out"
+          link="/sign-out"
+          :show-label="isSidebarOpen"
+        >
           <Icon name="tabler:logout-2" size="24" />
         </AppSidebarLink>
       </div>
     </div>
-    <div class="flex-1" />
+    <div class="flex-1">
+      <NuxtPage />
+    </div>
   </div>
 </template>
