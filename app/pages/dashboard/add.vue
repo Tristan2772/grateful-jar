@@ -4,7 +4,7 @@ import type { FetchError } from "ofetch";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 
-import { InsertJarSchema } from "~/lib/db/schema";
+import { InsertJar } from "~/lib/db/schema";
 
 const { $csrfFetch } = useNuxtApp() as any;
 
@@ -13,7 +13,7 @@ const router = useRouter();
 const isSubmitted = ref(false);
 const submitError = ref("");
 const { handleSubmit, errors, meta, setErrors } = useForm({
-  validationSchema: toTypedSchema(InsertJarSchema),
+  validationSchema: toTypedSchema(InsertJar),
 });
 
 const onSubmit = handleSubmit(async (values) => {
@@ -32,7 +32,7 @@ const onSubmit = handleSubmit(async (values) => {
     if (error.data?.data) {
       setErrors(error.data?.data);
     }
-    submitError.value = error.statusMessage || "An unknown error occurred";
+    submitError.value = error.data?.statusMessage || error.statusMessage || "An unknown error occurred";
   }
   loading.value = false;
 });
