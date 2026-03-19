@@ -18,10 +18,12 @@ export const jars = sqliteTable("jars", {
   unique().on(t.name, t.userId),
 ]);
 
-export const InsertJarSchema = createInsertSchema(jars, {
+export const InsertJar = createInsertSchema(jars, {
   name: z.string().min(1).max(100),
   description: z.string().max(1000).optional().nullable(),
 }).pick({
   name: true,
   description: true,
 });
+
+export type InsertJar = z.infer<typeof InsertJar>;
