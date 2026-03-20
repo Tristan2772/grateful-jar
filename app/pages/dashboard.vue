@@ -24,7 +24,7 @@ function toggleSidebar() {
       </div>
       <div class="flex flex-col">
         <AppSidebarLink
-          label="My Jars"
+          label="Jars"
           link="/dashboard"
           :show-label="isSidebarOpen"
         >

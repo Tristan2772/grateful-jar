@@ -3,16 +3,11 @@ import type { DrizzleError } from "drizzle-orm";
 import slugify from "slug";
 
 import { InsertJar } from "~/lib/db/schema";
+import defineAuthenticatedEventHandler from "~/utils/define-authenticated-event-handler";
 
 import { findJarByName, findUniqueSlug, insertJar } from "../../app/lib/db/queries/jars";
 
-export default defineEventHandler(async (event) => {
-  if (!event.context.user) {
-    return sendError(event, createError({
-      statusCode: 401,
-      statusMessage: "Unauthorized",
-    }));
-  }
+export default defineAuthenticatedEventHandler(async (event) => {
   const result = await readValidatedBody(event, InsertJar.safeParse);
 
   if (!result.success) {
