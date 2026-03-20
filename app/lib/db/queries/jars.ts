@@ -8,6 +8,12 @@ import { jars } from "../schema";
 
 const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz", 5);
 
+export async function findAllJars(userId: number) {
+  return db.query.jars.findMany({
+    where: eq(jars.userId, userId),
+  });
+}
+
 export async function findJarByName(existing: InsertJar, userId: number) {
   return db.query.jars.findFirst({
     where: and(
