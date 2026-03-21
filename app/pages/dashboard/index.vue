@@ -1,6 +1,9 @@
 <script lang="ts" setup>
-const { data, status } = useFetch("/api/jars", {
-  lazy: true,
+const jarsStore = useJarsStore();
+const { jars, status } = storeToRefs(jarsStore);
+
+onMounted(() => {
+  jarsStore.refresh();
 });
 </script>
 
@@ -12,9 +15,9 @@ const { data, status } = useFetch("/api/jars", {
     <div v-if="status === 'pending'">
       <span class="loading loading-spinner loading-xl" />
     </div>
-    <div v-else-if="data && data.length > 0" class="flex mt-4 gap-2">
+    <div v-else-if="jars && jars.length > 0" class="flex mt-4 gap-2">
       <div
-        v-for="jar in data"
+        v-for="jar in jars"
         :key="jar.id"
         class="card card-compact bg-base-300 h-40 w-72"
       >
