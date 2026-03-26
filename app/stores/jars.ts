@@ -4,6 +4,8 @@ export const useJarsStore = defineStore("useJarsStore", () => {
   });
   const sidebarStore = useSidebarStore();
 
+  // todo: set FAVORITE jars in scrollable sidebar
+  // todo: area, otherwise set ALL jars in sidebar
   watchEffect(() => {
     if (data.value) {
       sidebarStore.loading = false;

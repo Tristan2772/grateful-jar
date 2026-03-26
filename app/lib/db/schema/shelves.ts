@@ -3,14 +3,10 @@ import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 import { user } from "./auth";
-import { shelves } from "./shelves";
 
-export const jars = sqliteTable("jars", {
+export const shelves = sqliteTable("shelves", {
   id: int().primaryKey({ autoIncrement: true }),
   name: text().notNull(),
-  slug: text().notNull().unique(),
-  description: text(),
-  shelf: int().references(() => shelves.id),
   userId: int().notNull().references(() => user.id),
   createdAt: int().notNull().$default(() => Date.now()),
   updatedAt: int().notNull().$default(() => Date.now()).$onUpdate(() => Date.now()),
@@ -18,12 +14,10 @@ export const jars = sqliteTable("jars", {
   unique().on(t.name, t.userId),
 ]);
 
-export const InsertJar = createInsertSchema(jars, {
+export const InsertShelf = createInsertSchema(shelves, {
   name: z.string().min(1).max(100),
-  description: z.string().max(1000).optional().nullable(),
 }).pick({
   name: true,
-  description: true,
 });
 
-export type InsertJar = z.infer<typeof InsertJar>;
+export type InsertShelf = z.infer<typeof InsertShelf>;

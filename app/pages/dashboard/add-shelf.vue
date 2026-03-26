@@ -4,7 +4,7 @@ import type { FetchError } from "ofetch";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 
-import { InsertJar } from "~/lib/db/schema";
+import { InsertShelf } from "~/lib/db/schema";
 
 const { $csrfFetch } = useNuxtApp() as any;
 
@@ -13,14 +13,14 @@ const router = useRouter();
 const isSubmitted = ref(false);
 const submitError = ref("");
 const { handleSubmit, errors, meta, setErrors } = useForm({
-  validationSchema: toTypedSchema(InsertJar),
+  validationSchema: toTypedSchema(InsertShelf),
 });
 
 const onSubmit = handleSubmit(async (values) => {
   try {
     submitError.value = "";
     loading.value = true;
-    await $csrfFetch("/api/jars", {
+    await $csrfFetch("/api/shelves", {
       method: "post",
       body: values,
     });
@@ -53,10 +53,10 @@ onBeforeRouteLeave(() => {
   <div class="container max-w-md mx-auto">
     <div class="my-4">
       <h1 class="text-lg">
-        Add Jar
+        Add Shelf
       </h1>
       <p class="text-sm">
-        A jar is a collection of your memories that you are grateful for. You can add a date and some pictures to each memory to help you best remember what you are grateful for.
+        A shelf is a way to organize your jars. Create a shelf, then place jars on it to group similar jars together.
       </p>
     </div>
     <div
@@ -74,43 +74,6 @@ onBeforeRouteLeave(() => {
         :error="errors.name"
         :disabled="loading"
       />
-      <AppFormField
-        label="Description"
-        name="description"
-        type="textarea"
-        :error="errors.name"
-        :disabled="loading"
-      />
-      <!-- <fieldset class="fieldset">
-        <legend class="fieldset-legend">
-          Started At
-        </legend>
-        <Field
-          name="started-at"
-          type="date"
-          class="input w-full"
-          :class="{ 'input-error': errors.name }"
-        >
-          <p v-if="errors.name" class="fieldset-label text-error">
-            {{ errors.name }}
-          </p>
-        </Field>
-      </fieldset>
-      <fieldset class="fieldset">
-        <legend class="fieldset-legend">
-          Ended At
-        </legend>
-        <Field
-          name="ended-at"
-          type="date"
-          class="input w-full"
-          :class="{ 'input-error': errors.name }"
-        >
-          <p v-if="errors.name" class="fieldset-label text-error">
-            {{ errors.name }}
-          </p>
-        </Field>
-      </fieldset> -->
       <div class="flex justify-end gap-2 mt-2">
         <button
           :disabled="loading"
@@ -129,7 +92,7 @@ onBeforeRouteLeave(() => {
           Add
           <span v-if="loading" class="loading loading-spinner loading-sm" />
           <Icon
-            v-else
+            v-if="!loading"
             name="tabler:plus"
             size="24"
           />

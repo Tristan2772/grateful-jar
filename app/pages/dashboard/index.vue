@@ -1,42 +1,69 @@
 <script lang="ts" setup>
 const jarsStore = useJarsStore();
 const { jars, status } = storeToRefs(jarsStore);
-
-onMounted(() => {
+const shelvesStore = useShelvesStore();
+const { shelves, status: shelvesStatus } = storeToRefs(shelvesStore);
+function getJarsOnShelf(shelfId: number) {
+  return jars.value?.filter(jar => jar.shelf === shelfId);
+}
+onBeforeMount(() => {
+  shelvesStore.refresh();
   jarsStore.refresh();
 });
 </script>
 
 <template>
   <div>
-    <h2 class="text-2xl">
+    <h2 class="text-2xl bg-base-200 p-1">
       Jars
     </h2>
-    <div v-if="status === 'pending'">
+    <div v-if="status === 'pending' || shelvesStatus === 'pending'">
       <span class="loading loading-spinner loading-xl" />
     </div>
-    <div v-else-if="jars && jars.length > 0" class="flex mt-4 gap-2">
-      <div
-        v-for="jar in jars"
-        :key="jar.id"
-        class="card card-compact bg-base-300 h-40 w-72"
-      >
-        <div class="card-body">
-          <h3 class="text-lg">
-            {{ jar.name }}
-          </h3>
-          <p>{{ jar.description }}</p>
+
+    <!-- ------------------------ if there are jars -------------------------------- -->
+    <div v-if="jars && jars.length > 0 && !(status === 'pending' || shelvesStatus === 'pending')" class="flex flex-col">
+      <AppShelfWithJars :jars-list="jars">
+        All Jars
+      </AppShelfWithJars>
+      <!-- ------------- All Shelves ------------- -->
+      <div v-if="shelves && shelves.length > 0">
+        <AppShelfWithJars
+          v-for="shelf in shelves"
+          :key="shelf.id"
+          :jars-list="getJarsOnShelf(shelf.id)"
+        >
+          {{ shelf.name }}
+        </AppShelfWithJars>
+        <div class="p-4">
+          <div class="flex card-compact bg-base-300 max-h-65 min-h-65 w-full p-3 border-2 border-dashed">
+            <div class="card-body text-center flex flex-col items-center justify-center gap-4">
+              <p class="text-xl max-h-fit">
+                Add a new shelf to organize your jars.
+              </p>
+              <NuxtLink to="/dashboard/add-shelf" class="btn btn-primary w-40">
+                Add Shelf
+                <Icon name="tabler:plus" size="24" />
+              </NuxtLink>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div v-else class="flex flex-col gap-2 mt-4">
-      <p>
-        Add a jar to get started.
-      </p>
-      <NuxtLink to="/dashboard/add" class="btn btn-primary w-40">
-        Add Jar
-        <Icon name="tabler:plus" size="24" />
-      </NuxtLink>
+
+    <!-- ------------------------ If there are no jars ----------------------------- -->
+    <div v-if="!jars?.length && !(status === 'pending' || shelvesStatus === 'pending')" class="p-4">
+      <div class="flex card-compact bg-base-300 max-h-65 min-h-65 aspect-square rounded-full p-3 border-2 border-dashed">
+        <div class="card-body text-center flex flex-col items-center justify-center gap-4">
+          <p class="text-xl max-h-fit">
+            Add a jar to get started.
+          </p>
+          <NuxtLink to="/dashboard/add-jar" class="btn btn-primary w-40">
+            Add Jar
+            <Icon name="tabler:plus" size="24" />
+          </NuxtLink>
+        </div>
+      </div>
     </div>
   </div>
 </template>
