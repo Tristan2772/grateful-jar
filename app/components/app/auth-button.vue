@@ -26,7 +26,7 @@ const authStore = useAuthStore();
     </ul>
   </div>
   <button
-    v-else-if="!authStore.user"
+    v-if="!authStore.user"
     :disabled="authStore.loading"
     class="btn btn-secondary"
     @click="authStore.signIn"
@@ -34,7 +34,7 @@ const authStore = useAuthStore();
     Sign in with Google
     <span v-if="authStore.loading" class="loading loading-spinner loading-md" />
     <Icon
-      v-else-if="!authStore.loading"
+      v-if="!authStore.loading"
       name="tabler:brand-google"
       size="24"
     />
