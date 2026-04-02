@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import type { jars } from "~/lib/db/schema/jars";
+import type { Jar } from "~/lib/types";
 
-type Jar = typeof jars.$inferSelect;
 const props = defineProps<{
+  isFirstShelf?: boolean;
   jarsList?: Jar[];
 }>();
+
+const jarsStore = useJarsStore();
 </script>
 
 <template>
@@ -18,17 +20,26 @@ const props = defineProps<{
         v-for="jar in props.jarsList"
         :key="jar.id"
       >
-        <div class="flex flex-col card-compact bg-base-300 max-h-65 min-h-65 aspect-square rounded-full p-3 border-2 border-solid">
+        <NuxtLink
+          :to="{
+            name: 'dashboard-jars-slug',
+            params: { slug: jar.slug },
+          }"
+          class="flex flex-col card-compact max-h-65 min-h-65 aspect-square rounded-full p-3 border-2 border-solid"
+          :class="jarsStore.hoveredJarName === jar.name ? 'border-primary bg-base-300' : 'bg-base-200' "
+          @mouseenter="jarsStore.hoveredJarName = jar.name"
+          @mouseleave="jarsStore.hoveredJarName = ''"
+        >
           <div class="card-body text-center">
             <h3 class="text-xl">
               {{ jar.name }}
             </h3>
             <p>{{ jar.description }}</p>
           </div>
-        </div>
+        </NuxtLink>
       </div>
     </div>
-    <AppShelfTitle :is-first-shelf="true">
+    <AppShelfTitle :is-first-shelf>
       <slot />
     </AppShelfTitle>
   </div>
@@ -38,8 +49,8 @@ const props = defineProps<{
     <div class="p-4">
       <div class="flex card-compact bg-base-300 max-h-65 min-h-65 aspect-square rounded-full p-3 border-2 border-dashed">
         <div class="card-body text-center flex flex-col items-center justify-center gap-4">
-          <p class="text-xl max-h-fit">
-            Add a jar to this shelf.
+          <p class="text-lg max-h-fit">
+            Add a new jar to this shelf.
           </p>
           <NuxtLink to="/dashboard/add-jar" class="btn btn-primary w-40">
             Add Jar
