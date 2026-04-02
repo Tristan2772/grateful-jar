@@ -14,6 +14,18 @@ export async function findAllJars(userId: number) {
   });
 }
 
+export async function findJar(slug: string, userId: number) {
+  return db.query.jars.findFirst({
+    where: and(
+      eq(jars.slug, slug),
+      eq(jars.userId, userId),
+    ),
+    with: {
+      jarNotes: true,
+    },
+  });
+}
+
 export async function findJarByName(existing: InsertJar, userId: number) {
   return db.query.jars.findFirst({
     where: and(

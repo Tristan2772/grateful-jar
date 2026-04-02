@@ -1,8 +1,12 @@
+import { relations } from "drizzle-orm";
 import { int, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+import type { SelectJarNote } from "./jar-notes";
+
 import { user } from "./auth";
+import { jarNotes } from "./jar-notes";
 import { shelves } from "./shelves";
 
 export const jars = sqliteTable("jars", {
@@ -26,4 +30,13 @@ export const InsertJar = createInsertSchema(jars, {
   description: true,
 });
 
+export const JarsRelations = relations(jars, ({ one, many }) => ({
+  shelf: one(shelves),
+  jarNotes: many(jarNotes),
+}));
+
 export type InsertJar = z.infer<typeof InsertJar>;
+export type SelectJar = typeof jars.$inferSelect;
+export type SelectJarWithNotes = SelectJar & {
+  jarNotes: SelectJarNote[];
+};

@@ -9,6 +9,7 @@
     viewBox="0 0 864 864"
     style="enable-background:new 0 0 864 864;"
     xml:space="preserve"
+    class="h-150"
   >
     <g
       stroke="currentColor"
