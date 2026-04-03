@@ -1,7 +1,6 @@
 import type { SelectJarWithNotes } from "~/lib/db/schema";
 
-const dashboardPages = new Set (["dashboard", "dashboard-add-jar", "dashboard-add-shelf"]);
-const currentJarPages = new Set (["dashboard-jars-slug", "dashboard-jars-slug-add", "dashboard-jars-slug-edit"]);
+import { CURRENT_JAR_PAGES, DASHBOARD_PAGES } from "~/lib/constants";
 
 export const useJarsStore = defineStore("useJarsStore", () => {
   const route = useRoute();
@@ -20,7 +19,7 @@ export const useJarsStore = defineStore("useJarsStore", () => {
   const sidebarStore = useSidebarStore();
 
   effect(() => {
-    if (allJars.value && dashboardPages.has(route.name?.toString() || "")) {
+    if (allJars.value && DASHBOARD_PAGES.has(route.name?.toString() || "")) {
       sidebarStore.loading = false;
       sidebarStore.sidebarItems = allJars.value.map(jar => ({
         id: `jar-${jar.id}`,
@@ -28,7 +27,7 @@ export const useJarsStore = defineStore("useJarsStore", () => {
         to: { name: "dashboard-jars-slug", params: { slug: jar.slug } },
       }));
     }
-    else if (currentJar.value && currentJarPages.has(route.name?.toString() || "")) {
+    else if (currentJar.value && CURRENT_JAR_PAGES.has(route.name?.toString() || "")) {
       sidebarStore.sidebarItems = [];
     }
     sidebarStore.loading = allJarsStatus.value === "pending";

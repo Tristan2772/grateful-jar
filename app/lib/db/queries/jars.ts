@@ -62,3 +62,11 @@ export async function insertJar(insertable: InsertJar, slug: string, userId: num
   }).returning();
   return created;
 }
+
+export async function updateJarBySlug(updates: InsertJar, slug: string, userId: number) {
+  const [updated] = await db.update(jars).set(updates).where(and(
+    eq(jars.slug, slug),
+    eq(jars.userId, userId),
+  )).returning();
+  return updated;
+}

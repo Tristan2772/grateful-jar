@@ -1,0 +1,2 @@
+export const DASHBOARD_PAGES = new Set (["dashboard", "dashboard-add-jar", "dashboard-add-shelf"]);
+export const CURRENT_JAR_PAGES = new Set (["dashboard-jars-slug", "dashboard-jars-slug-add", "dashboard-jars-slug-edit"]);

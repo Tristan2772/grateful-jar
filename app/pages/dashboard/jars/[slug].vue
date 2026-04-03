@@ -1,11 +1,18 @@
 <script lang="ts" setup>
 const jarStore = useJarsStore();
 const { currentJar: jar, currentJarError: error, currentJarStatus: status } = storeToRefs(jarStore);
+const route = useRoute();
 
 onMounted(() => {
   setTimeout(() => {
     jarStore.currentJarRefresh();
   }, 0);
+});
+
+onBeforeRouteUpdate((to) => {
+  if (to.name === "dashboard-jars-slug") {
+    jarStore.currentJarRefresh();
+  }
 });
 </script>
 
@@ -20,7 +27,7 @@ onMounted(() => {
         <span>{{ error.name }}</span>
       </div>
     </div>
-    <div v-if="jar && status !== 'pending'">
+    <div v-if="route.name === 'dashboard-jars-slug' && jar && status !== 'pending'">
       <div class="flex">
         <div class="flex flex-col gap-4 items-center absolute bottom-15 left-0 right-0">
           <h2 class="text-2xl">
@@ -44,6 +51,9 @@ onMounted(() => {
           </div>
         </div>
       </div>
+    </div>
+    <div v-if="route.name !== 'dashboard-jars-slug' && jar && status !== 'pending'">
+      <NuxtPage />
     </div>
   </div>
 </template>
