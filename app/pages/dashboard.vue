@@ -1,22 +1,28 @@
 <script lang="ts" setup>
+import { CURRENT_JAR_PAGES, DASHBOARD_PAGES } from "~/lib/constants";
+
 const isSidebarOpen = ref(false);
 const jarsStore = useJarsStore();
 const shelvesStore = useShelvesStore();
 const route = useRoute();
 const sidebarStore = useSidebarStore();
-const { currentJar } = storeToRefs(jarsStore);
+const { currentJar, currentJarStatus } = storeToRefs(jarsStore);
+
+if (DASHBOARD_PAGES.has(route.name?.toString() || "")) {
+  await jarsStore.allJarsRefresh();
+  await shelvesStore.refresh();
+}
+if (CURRENT_JAR_PAGES.has(route.name?.toString() || "")) {
+  await jarsStore.currentJarRefresh();
+}
 
 onMounted(() => {
   isSidebarOpen.value = localStorage.getItem("isSidebarOpen") === "true";
-  if (route.path !== "/dashboard") {
-    jarsStore.allJarsRefresh();
-    shelvesStore.refresh();
-  }
 });
 
 effect(() => {
   // ------------------ if user is on dashboard -----------------
-  if (route.name === "dashboard") {
+  if (DASHBOARD_PAGES.has(route.name?.toString() || "")) {
     sidebarStore.sidebarTopItems = [{
       id: "link-dashboard",
       label: "Jars",
@@ -30,43 +36,46 @@ effect(() => {
   }
 
   // ----------------- if user is on specific jar page -------------------
-  if (route.name === "dashboard-jars-slug") {
+  else if (CURRENT_JAR_PAGES.has(route.name?.toString() || "")) {
     // ----------------- set Top items --------------
     sidebarStore.sidebarTopItems = [{
       id: "link-dashboard",
       label: "Back to Jars",
       link: "/dashboard",
       icon: "tabler:arrow-left",
-    }, {
-      id: "link-jar",
-      label: currentJar.value ? currentJar.value.name : "View Notes",
-      to: {
-        name: "dashboard-jars-slug",
-        params: {
-          slug: currentJar.value?.slug,
-        },
-      },
-    }, {
-      id: "link-jar-edit",
-      label: "Edit Jar",
-      to: {
-        name: "dashboard-jars-slug-edit",
-        params: {
-          slug: currentJar.value?.slug,
-        },
-      },
-      component: "JarSettingsIcon",
-    }, {
-      id: "link-jar-add",
-      label: "New Note",
-      to: {
-        name: "dashboard-jars-slug-add",
-        params: {
-          slug: currentJar.value?.slug,
-        },
-      },
-      icon: "tabler:plus",
     }];
+    if (currentJar.value && currentJarStatus.value !== "pending") {
+      sidebarStore.sidebarTopItems.push({
+        id: "link-jar",
+        label: currentJar.value.name,
+        to: {
+          name: "dashboard-jars-slug",
+          params: {
+            slug: route.params.slug,
+          },
+        },
+      }, {
+        id: "link-jar-edit",
+        label: "Edit Jar",
+        to: {
+          name: "dashboard-jars-slug-edit",
+          params: {
+            slug: route.params.slug,
+          },
+        },
+        component: "JarSettingsIcon",
+      }, {
+        id: "link-jar-add",
+        label: "New Note",
+        to: {
+          name: "dashboard-jars-slug-add",
+          params: {
+            slug: route.params.slug,
+          },
+        },
+        icon: "tabler:plus",
+      });
+    }
   }
 });
 
@@ -122,6 +131,9 @@ function toggleSidebar() {
               @mouseleave="jarsStore.hoveredJarName = ''"
             />
           </div>
+          <div v-if="route.path.startsWith('/dashboard/jars') && currentJarStatus === 'pending'" class="px-4 py-2">
+            <div class="skeleton h-4 w-full" />
+          </div>
 
           <!-- ----------------------- bottom of Sidebar ----------------------- -->
           <div class="divider" />
@@ -136,7 +148,7 @@ function toggleSidebar() {
 
       <!-- --------------------------- main screen -------------------------- -->
 
-      <div class="flex-1 min-w-0 relative bg-radial-[at_50%_95%] from-base-300 to-base-100 to-75%">
+      <div class="flex-1 min-w-0 relative bg-linear-to-t from-base-300 from-10% to-base-100 to-40%">
         <NuxtPage />
       </div>
     </div>
