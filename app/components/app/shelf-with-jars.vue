@@ -26,7 +26,7 @@ const jarsStore = useJarsStore();
             params: { slug: jar.slug },
           }"
           class="flex flex-col card-compact max-h-65 min-h-65 aspect-square rounded-full p-3 border-2 border-solid"
-          :class="jarsStore.hoveredJarName === jar.name ? 'border-primary bg-base-300' : 'bg-base-200' "
+          :class="jarsStore.hoveredJarName === jar.name ? 'border-primary bg-base-300' : 'bg-base-100' "
           @mouseenter="jarsStore.hoveredJarName = jar.name"
           @mouseleave="jarsStore.hoveredJarName = ''"
         >
@@ -47,12 +47,12 @@ const jarsStore = useJarsStore();
   <!-- ---------------------------------- if no jars on shelf ---------------------------------- -->
   <div v-if="jarsList && jarsList.length === 0">
     <div class="p-4">
-      <div class="flex card-compact bg-base-300 max-h-65 min-h-65 aspect-square rounded-full p-3 border-2 border-dashed">
+      <div class="flex card-compact bg-base-100 max-h-65 min-h-65 aspect-square rounded-full p-3 border-2 border-dashed">
         <div class="card-body text-center flex flex-col items-center justify-center gap-4">
           <p class="text-lg max-h-fit">
             Add a new jar to this shelf.
           </p>
-          <NuxtLink to="/dashboard/add-jar" class="btn btn-primary w-40">
+          <NuxtLink to="/dashboard/add-jar" class="btn btn-secondary w-40">
             Add Jar
             <Icon name="tabler:plus" size="24" />
           </NuxtLink>

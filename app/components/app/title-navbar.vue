@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar bg-base-300 shadow-sm">
+  <div class="navbar bg-blue-900 shadow-sm text-gray-300">
     <div class="flex-1">
       <NuxtLink class="btn btn-ghost text-xl" to="/">
         Grateful Jar

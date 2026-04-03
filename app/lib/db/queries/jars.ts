@@ -70,3 +70,11 @@ export async function updateJarBySlug(updates: InsertJar, slug: string, userId: 
   )).returning();
   return updated;
 }
+
+export async function removeJarBySlug(slug: string, userId: number) {
+  const [deleted] = await db.delete(jars).where(and(
+    eq(jars.slug, slug),
+    eq(jars.userId, userId),
+  )).returning();
+  return deleted;
+}
