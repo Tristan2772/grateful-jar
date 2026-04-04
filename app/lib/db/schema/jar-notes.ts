@@ -1,5 +1,7 @@
 import { relations } from "drizzle-orm";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { createInsertSchema } from "drizzle-zod";
+import z from "zod";
 
 import { user } from "./auth";
 import { jars } from "./jars";
@@ -23,4 +25,31 @@ export const JarNotesRelations = relations(jarNotes, ({ one }) => ({
   }),
 }));
 
+const BaseInsertJarNote = createInsertSchema(jarNotes, {
+  name: z.string().min(1).max(100),
+  description: z.string().max(1000).optional().nullable(),
+}).omit({
+  id: true,
+  userId: true,
+  jarId: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const InsertJarNote = BaseInsertJarNote.superRefine((values, context) => {
+  if (values.startedAt > values.endedAt || values.endedAt < values.startedAt) {
+    context.addIssue({
+      code: "custom",
+      message: "Start date must be before end date",
+      path: ["startedAt"],
+    });
+    context.addIssue({
+      code: "custom",
+      message: "End date must be after start date",
+      path: ["endedAt"],
+    });
+  }
+});
+
 export type SelectJarNote = typeof jarNotes.$inferSelect;
+export type InsertJarNote = z.infer<typeof InsertJarNote>;
