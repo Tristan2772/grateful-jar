@@ -16,7 +16,7 @@ const authStore = useAuthStore();
         <NuxtLink
           v-if="authStore.user"
           to="/dashboard"
-          class="btn btn-primary"
+          class="btn btn-secondary"
         >
           View Jars
         </NuxtLink>

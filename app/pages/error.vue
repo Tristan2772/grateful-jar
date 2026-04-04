@@ -9,7 +9,7 @@ const error = route.query.error || "An unknown error has occurred.";
       <Icon name="tabler:square-rounded-letter-x-filled" size="24" />
       <span>Uh oh! {{ error }}</span>
     </div>
-    <NuxtLink class="btn btn-primary" to="/">
+    <NuxtLink class="btn btn-secondary" to="/">
       Home <Icon name="tabler:arrow-left" size="24" />
     </NuxtLink>
   </div>

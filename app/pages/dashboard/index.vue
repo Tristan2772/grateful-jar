@@ -20,7 +20,7 @@ onBeforeMount(() => {
     </div>
     <!-- ------------------------ if there are jars -------------------------------- -->
     <div v-if="allJars && allJars.length > 0 && !(allJarsStatus === 'pending' || shelvesStatus === 'pending')" class="flex flex-col">
-      <h2 class="text-2xl bg-base-200 p-1">
+      <h2 class="text-2xl p-1 bg-base-200">
         Jars
       </h2>
       <AppShelfWithJars :jars-list="allJars" :is-first-shelf="true">
@@ -42,7 +42,7 @@ onBeforeMount(() => {
             <p class="text-xl max-h-fit">
               Add a new shelf to organize your jars.
             </p>
-            <NuxtLink to="/dashboard/add-shelf" class="btn btn-primary w-40">
+            <NuxtLink to="/dashboard/add-shelf" class="btn btn-secondary w-40">
               Add Shelf
               <Icon name="tabler:plus" size="24" />
             </NuxtLink>
@@ -58,7 +58,7 @@ onBeforeMount(() => {
           <p class="text-xl max-h-fit">
             Add a jar to get started.
           </p>
-          <NuxtLink to="/dashboard/add-jar" class="btn btn-primary w-40">
+          <NuxtLink to="/dashboard/add-jar" class="btn btn-secondary w-40 flex items-center">
             Add Jar
             <Icon name="tabler:plus" size="24" />
           </NuxtLink>

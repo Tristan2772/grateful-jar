@@ -86,7 +86,7 @@ function toggleSidebar() {
 </script>
 
 <template>
-  <div class="flex-1">
+  <div class="w-full">
     <div class="flex h-full">
       <div class="bg-base-100 transition-all duration-300" :class="{ 'min-w-64 max-w-64': isSidebarOpen, 'min-w-16 max-w-16': !isSidebarOpen }">
         <!-- ------------------------- top of Sidebar ------------------------------ -->
@@ -148,7 +148,7 @@ function toggleSidebar() {
 
       <!-- --------------------------- main screen -------------------------- -->
 
-      <div class="flex-1 min-w-0 relative bg-linear-to-t from-base-300 from-10% to-base-100 to-40%">
+      <div class="flex-1 min-w-0 w-full relative bg-base-300">
         <NuxtPage />
       </div>
     </div>
