@@ -105,7 +105,7 @@ onBeforeRouteUpdate((to) => {
               <p class="text-lg max-h-fit">
                 Add a note to get started.
               </p>
-              <NuxtLink to="/dashboard/add-jar" class="btn btn-secondary w-40">
+              <NuxtLink :to="{ name: 'dashboard-jars-slug-add', params: { slug: route.params.slug } }" class="btn btn-secondary w-40">
                 Add Note
                 <Icon name="tabler:plus" size="24" />
               </NuxtLink>

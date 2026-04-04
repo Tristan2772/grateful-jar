@@ -10,9 +10,3 @@ declare module "h3" {
 }
 
 export type Jar = typeof jars.$inferSelect;
-// export type Jar = {
-//   id: number;
-//   name: string;
-//   description: string | null;
-//   to?: RouteLocationRaw;
-// };
