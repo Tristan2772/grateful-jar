@@ -2,7 +2,7 @@
 import type { FetchError } from "ofetch";
 
 const jarStore = useJarsStore();
-const { currentJar: jar, currentJarError: error, currentJarStatus: status } = storeToRefs(jarStore);
+const { currentJar: jar, currentJarError: error, currentJarStatus: status, hoveredJarName } = storeToRefs(jarStore);
 const route = useRoute();
 const isOpen = ref(false);
 
@@ -118,11 +118,15 @@ onBeforeRouteUpdate((to) => {
             <AppJarNote
               v-for="note in jar.jarNotes"
               :key="note.id"
+              :note-id="note.id"
               :name="note.name"
               :description="note.description"
               :started-at="note.startedAt"
               :ended-at="note.endedAt"
               class="zig-zag"
+              :class="hoveredJarName === note.name ? 'border-2 border-primary' : 'border-0' "
+              @mouseenter="hoveredJarName = note.name"
+              @mouseleave="hoveredJarName = ''"
             />
           </div>
         </div>

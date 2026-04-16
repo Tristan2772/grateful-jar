@@ -6,7 +6,7 @@ export type SidebarItem = {
   link?: string;
   to?: RouteLocationRaw;
   icon?: string;
-  component?: "JarIcon" | "JarSettingsIcon";
+  component?: "JarIcon" | "JarSettingsIcon" | "NoteSettingsIcon";
 };
 
 export const useSidebarStore = defineStore("useSidebarStore", () => {
