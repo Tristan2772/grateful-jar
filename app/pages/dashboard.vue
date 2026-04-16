@@ -1,17 +1,20 @@
 <script lang="ts" setup>
-import { CURRENT_JAR_PAGES, DASHBOARD_PAGES } from "~/lib/constants";
+import { CURRENT_JAR_PAGES, CURRENT_NOTE_PAGES, DASHBOARD_PAGES } from "~/lib/constants";
 
 const jarsStore = useJarsStore();
 const shelvesStore = useShelvesStore();
 const route = useRoute();
 const sidebarStore = useSidebarStore();
-const { currentJar, currentJarStatus } = storeToRefs(jarsStore);
+const { currentJar, currentJarStatus, currentNote, currentNoteStatus } = storeToRefs(jarsStore);
 
 if (DASHBOARD_PAGES.has(route.name?.toString() || "")) {
   await jarsStore.allJarsRefresh();
   await shelvesStore.refresh();
 }
 if (CURRENT_JAR_PAGES.has(route.name?.toString() || "")) {
+  await jarsStore.currentJarRefresh();
+}
+if (CURRENT_NOTE_PAGES.has(route.name?.toString() || "")) {
   await jarsStore.currentJarRefresh();
 }
 
@@ -76,6 +79,46 @@ effect(() => {
       });
     }
   }
+
+  // ----------------- if user is on specific note page -------------------
+  else if (CURRENT_NOTE_PAGES.has(route.name?.toString() || "")) {
+    // ----------------- set Top items --------------
+    sidebarStore.sidebarTopItems = [{
+      id: "link-previous-jar",
+      label: "Back to Notes",
+      to: {
+        name: "dashboard-jars-slug",
+        params: {
+          slug: route.params.slug,
+        },
+      },
+      icon: "tabler:arrow-left",
+    }];
+    if (currentNote.value && currentNoteStatus.value !== "pending") {
+      sidebarStore.sidebarTopItems.push({
+        id: "link-note",
+        label: currentNote.value.name,
+        to: {
+          name: "dashboard-jars-slug",
+          params: {
+            slug: route.params.slug,
+          },
+        },
+        icon: "tabler:file-text",
+      }, {
+        id: "link-note-edit",
+        label: "Edit Note",
+        to: {
+          name: "dashboard-jars-slug-id-edit",
+          params: {
+            slug: route.params.slug,
+            id: route.params.id,
+          },
+        },
+        component: "NoteSettingsIcon",
+      });
+    }
+  }
 });
 </script>
 
@@ -121,14 +164,13 @@ effect(() => {
               :key="item.id"
               :label="item.label"
               :to="item.to"
+              :icon="item.icon"
+              :component="item.component"
               :show-label="sidebarStore.isSidebarOpen"
               :is-hovered-jar="jarsStore.hoveredJarName === item.label"
               @mouseenter="jarsStore.hoveredJarName = item.label"
               @mouseleave="jarsStore.hoveredJarName = ''"
             />
-          </div>
-          <div v-if="route.path.startsWith('/dashboard/jars') && currentJarStatus === 'pending'" class="px-4 py-2">
-            <div class="skeleton h-4 w-full" />
           </div>
 
           <!-- ----------------------- bottom of Sidebar ----------------------- -->

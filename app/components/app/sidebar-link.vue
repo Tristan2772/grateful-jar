@@ -8,7 +8,7 @@ const props = defineProps<{
   showLabel: boolean;
   isHoveredJar?: boolean;
   icon?: string;
-  component?: "JarIcon" | "JarSettingsIcon";
+  component?: "JarIcon" | "JarSettingsIcon" | "NoteSettingsIcon";
 }>();
 
 const route = useRoute();
@@ -22,18 +22,20 @@ const route = useRoute();
   >
     <NuxtLink
       :to="props.link || props.to"
-      class="btn btn-ghost gap-2 p-2 bg-base-100 hover:bg-base-300 w-full flex-nowrap"
+      class="btn btn-ghost gap-2 p-2 bg-base-100 hover:bg-base-300 w-full flex"
       :class="{ 'bg-base-200': route.path === props.link, 'bg-base-300': isHoveredJar, 'justify-center': !showLabel, 'justify-start': showLabel }"
     >
-      <AppJarIcon v-if="(!props.icon && !props.component) || props.component === 'JarIcon'" />
-      <AppJarSettingsIcon v-if="props.component === 'JarSettingsIcon'" />
+      <AppJarIcon v-if="(!props.icon && !props.component) || props.component === 'JarIcon'" class="shrink-0" />
+      <AppJarSettingsIcon v-if="props.component === 'JarSettingsIcon'" class="shrink-0" />
+      <AppNoteSettingsIcon v-if="props.component === 'NoteSettingsIcon'" class="shrink-0" />
       <Icon
         v-if="props.icon"
         :name="props.icon"
+        class="shrink-0"
         size="24"
       />
       <Transition name="grow">
-        <span v-if="props.showLabel">
+        <span v-if="props.showLabel" class="truncate">
           {{ props.label }}
         </span>
       </Transition>
