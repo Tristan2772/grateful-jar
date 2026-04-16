@@ -4,3 +4,7 @@
     winter --default,
     night --prefersdark;
 }
+@theme {
+  --breakpoint-md: 53rem;
+  --breakpoint-lg: 69rem;
+}

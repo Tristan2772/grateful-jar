@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { CURRENT_JAR_PAGES, DASHBOARD_PAGES } from "~/lib/constants";
 
-const isSidebarOpen = ref(false);
 const jarsStore = useJarsStore();
 const shelvesStore = useShelvesStore();
 const route = useRoute();
@@ -17,7 +16,7 @@ if (CURRENT_JAR_PAGES.has(route.name?.toString() || "")) {
 }
 
 onMounted(() => {
-  isSidebarOpen.value = localStorage.getItem("isSidebarOpen") === "true";
+  sidebarStore.isSidebarOpen = localStorage.getItem("isSidebarOpen") === "true";
 });
 
 effect(() => {
@@ -78,25 +77,22 @@ effect(() => {
     }
   }
 });
-
-function toggleSidebar() {
-  isSidebarOpen.value = !isSidebarOpen.value;
-  localStorage.setItem("isSidebarOpen", isSidebarOpen.value.toString());
-}
 </script>
 
 <template>
   <div class="w-full">
     <div class="flex h-full">
-      <div class="bg-base-100 transition-all duration-300" :class="{ 'min-w-64 max-w-64': isSidebarOpen, 'min-w-16 max-w-16': !isSidebarOpen }">
+      <!-- --------------------------- side bar ----------------------------- -->
+
+      <div class="bg-base-100 transition-all duration-300 top-16 fixed bottom-0 left-0 z-50" :class="{ 'min-w-64 max-w-64': sidebarStore.isSidebarOpen, 'min-w-16 max-w-16': !sidebarStore.isSidebarOpen }">
         <!-- ------------------------- top of Sidebar ------------------------------ -->
         <div
           class="flex p-2 hover:bg-base-300 hover:cursor-pointer"
-          :class="{ 'justify-center': !isSidebarOpen, 'justify-end': isSidebarOpen }"
-          @click="toggleSidebar"
+          :class="{ 'justify-center': !sidebarStore.isSidebarOpen, 'justify-end': sidebarStore.isSidebarOpen }"
+          @click="sidebarStore.toggleSidebar()"
         >
           <Icon
-            :name="isSidebarOpen ? 'tabler:chevron-left' : 'tabler:chevron-right'"
+            :name="sidebarStore.isSidebarOpen ? 'tabler:chevron-left' : 'tabler:chevron-right'"
             size="32"
             class="btn btn-ghost"
           />
@@ -110,7 +106,7 @@ function toggleSidebar() {
             :to="item.to"
             :icon="item.icon"
             :component="item.component"
-            :show-label="isSidebarOpen"
+            :show-label="sidebarStore.isSidebarOpen"
           />
 
           <!-- --------------------- mid of Sidebar --------------------------------- -->
@@ -125,7 +121,7 @@ function toggleSidebar() {
               :key="item.id"
               :label="item.label"
               :to="item.to"
-              :show-label="isSidebarOpen"
+              :show-label="sidebarStore.isSidebarOpen"
               :is-hovered-jar="jarsStore.hoveredJarName === item.label"
               @mouseenter="jarsStore.hoveredJarName = item.label"
               @mouseleave="jarsStore.hoveredJarName = ''"
@@ -141,14 +137,14 @@ function toggleSidebar() {
             label="Sign Out"
             link="/sign-out"
             icon="tabler:logout-2"
-            :show-label="isSidebarOpen"
+            :show-label="sidebarStore.isSidebarOpen"
           />
         </div>
       </div>
 
       <!-- --------------------------- main screen -------------------------- -->
 
-      <div class="flex-1 min-w-0 w-full relative bg-base-300">
+      <div class="flex-1 min-w-0 w-full h-full relative transition-all duration-300" :class="{ 'ml-64': sidebarStore.isSidebarOpen, 'ml-16': !sidebarStore.isSidebarOpen }">
         <NuxtPage />
       </div>
     </div>

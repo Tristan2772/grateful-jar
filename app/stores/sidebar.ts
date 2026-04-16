@@ -13,10 +13,18 @@ export const useSidebarStore = defineStore("useSidebarStore", () => {
   const sidebarItems = ref<SidebarItem[]>([]);
   const sidebarTopItems = ref<SidebarItem[]>([]);
   const loading = ref(false);
+  const isSidebarOpen = ref(false);
+
+  function toggleSidebar() {
+    isSidebarOpen.value = !isSidebarOpen.value;
+    localStorage.setItem("isSidebarOpen", isSidebarOpen.value.toString());
+  }
 
   return {
     loading,
     sidebarItems,
     sidebarTopItems,
+    isSidebarOpen,
+    toggleSidebar,
   };
 });

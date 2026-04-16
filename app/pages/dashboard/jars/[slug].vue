@@ -11,11 +11,9 @@ function openDialog() {
   (document.activeElement as HTMLAnchorElement).blur();
 }
 
-const deleteError = ref("");
 const isDeleting = ref(false);
-
 const loading = computed(() => status.value === "pending" || isDeleting.value);
-
+const deleteError = ref("");
 const errorMessage = computed(() => error.value?.statusMessage || deleteError.value);
 
 async function confirmDelete() {
@@ -34,6 +32,8 @@ async function confirmDelete() {
   }
   isDeleting.value = false;
 }
+
+const sidebarStore = useSidebarStore();
 
 onMounted(() => {
   setTimeout(() => {
@@ -60,11 +60,11 @@ onBeforeRouteUpdate((to) => {
       </div>
     </div>
     <div v-if="route.name === 'dashboard-jars-slug' && jar && !loading">
-      <div class="flex">
-        <div class="flex flex-col gap-4 items-center absolute bottom-15 left-0 right-0">
+      <div class="flex pb-40">
+        <div class="flex flex-col gap-2 pt-20 items-center text-center fixed bottom-0 right-3 z-20 transition-all duration-300 bg-linear-to-b from-transparent to-base-300 to-55%" :class="{ 'left-16': !sidebarStore.isSidebarOpen, 'left-64': sidebarStore.isSidebarOpen }">
           <h2 class="text-2xl flex items-center gap-2">
             {{ jar.name }}
-            <div class="dropdown dropdown-bottom dropdown-end">
+            <div class="dropdown dropdown-top dropdown-start">
               <div
                 tabindex="0"
                 role="button"
@@ -95,11 +95,12 @@ onBeforeRouteUpdate((to) => {
               </ul>
             </div>
           </h2>
-          <p class="text-sm">
+          <p class="text-sm min-h-16">
             {{ jar.description }}
           </p>
         </div>
-        <div class="note-container p-4 flex ">
+        <div class="p-4 flex w-full">
+          <!-- ----------------if there are no notes for this jar ----------------------- -->
           <div v-if="!jar.jarNotes.length" class="zig-zag bg-base-100 h-35">
             <div class="card-body text-center flex flex-col items-center justify-center gap-4">
               <p class="text-lg max-h-fit">
@@ -110,6 +111,19 @@ onBeforeRouteUpdate((to) => {
                 <Icon name="tabler:plus" size="24" />
               </NuxtLink>
             </div>
+          </div>
+
+          <!-- ---------------------------- if there are notes ---------------------------- -->
+          <div v-if="jar.jarNotes.length > 0" class="flex flex-wrap gap-4">
+            <AppJarNote
+              v-for="note in jar.jarNotes"
+              :key="note.id"
+              :name="note.name"
+              :description="note.description"
+              :started-at="note.startedAt"
+              :ended-at="note.endedAt"
+              class="zig-zag"
+            />
           </div>
         </div>
       </div>
