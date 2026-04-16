@@ -21,7 +21,11 @@ export async function findJar(slug: string, userId: number) {
       eq(jars.userId, userId),
     ),
     with: {
-      jarNotes: true,
+      jarNotes: {
+        orderBy(fields, operators) {
+          return operators.desc(fields.startedAt);
+        },
+      },
     },
   });
 }
