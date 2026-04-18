@@ -4,7 +4,7 @@ import { InsertJarNote } from "~/lib/db/schema";
 const props = defineProps<{
   initialValues?: InsertJarNote;
   submitLabel: string;
-  submitIcon: string;
+  submitIcon: "NoteUpdateIcon" | "tabler:plus";
   onSubmit: (note: InsertJarNote) => Promise<any>;
   onSubmitComplete: () => void;
 }>();

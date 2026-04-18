@@ -4,7 +4,7 @@ import { InsertJar } from "~/lib/db/schema";
 const props = defineProps<{
   initialValues?: InsertJar;
   submitLabel: string;
-  submitIcon: string;
+  submitIcon: "JarUpdateIcon" | "tabler:plus";
   onSubmit: (jar: InsertJar) => Promise<any>;
   onSubmitComplete: () => void;
 }>();

@@ -18,6 +18,7 @@ const authStore = useAuthStore();
           to="/dashboard"
           class="btn btn-secondary"
         >
+          <AppJarsGroupIcon />
           View Jars
         </NuxtLink>
       </div>

@@ -8,7 +8,7 @@ const props = defineProps<{
   showLabel: boolean;
   isHoveredJar?: boolean;
   icon?: string;
-  component?: "JarIcon" | "JarSettingsIcon" | "NoteSettingsIcon";
+  component?: "JarIcon" | "JarSettingsIcon" | "JarUpdateIcon" | "JarsGroupIcon" | "NoteSettingsIcon" | "NoteUpdateIcon";
 }>();
 
 const route = useRoute();
@@ -27,7 +27,10 @@ const route = useRoute();
     >
       <AppJarIcon v-if="(!props.icon && !props.component) || props.component === 'JarIcon'" class="shrink-0" />
       <AppJarSettingsIcon v-if="props.component === 'JarSettingsIcon'" class="shrink-0" />
+      <AppJarUpdateIcon v-if="props.component === 'JarUpdateIcon'" class="shrink-0" />
+      <AppJarsGroupIcon v-if="props.component === 'JarsGroupIcon'" class="shrink-0" />
       <AppNoteSettingsIcon v-if="props.component === 'NoteSettingsIcon'" class="shrink-0" />
+      <AppNoteUpdateIcon v-if="props.component === 'NoteUpdateIcon'" class="shrink-0" />
       <Icon
         v-if="props.icon"
         :name="props.icon"
