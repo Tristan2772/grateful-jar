@@ -96,10 +96,10 @@ onBeforeRouteUpdate((to) => {
           </h2>
           <p class="text-sm italic text-gray-500">
             <span v-if="note.startedAt !== note.endedAt">
-              {{ formatDate(note.startedAt) }} / {{ formatDate(note.endedAt) }}
+              {{ formatDateYearLast(note.startedAt) }} / {{ formatDateYearLast(note.endedAt) }}
             </span>
             <span v-else>
-              {{ formatDate(note.startedAt) }}
+              {{ formatDateYearLast(note.startedAt) }}
             </span>
           </p>
           <p class="text-sm min-h-16">

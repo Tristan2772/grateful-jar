@@ -18,10 +18,10 @@ const route = useRoute();
     <div>
       <p class="text-sm italic text-gray-500">
         <span v-if="props.startedAt !== props.endedAt">
-          {{ formatDate(props.startedAt) }} / {{ formatDate(props.endedAt) }}
+          {{ formatDateYearLast(props.startedAt) }} / {{ formatDateYearLast(props.endedAt) }}
         </span>
         <span v-else>
-          {{ formatDate(props.startedAt) }}
+          {{ formatDateYearLast(props.startedAt) }}
         </span>
       </p>
       <h3 class="text-xl border-b-4 border-double min-h-16 max-h-16 flex items-end">

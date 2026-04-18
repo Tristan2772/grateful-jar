@@ -27,7 +27,7 @@ function onSubmitComplete() {
   <div class="container max-w-md mx-auto">
     <div class="my-4">
       <h1 class="text-lg">
-        Edit
+        Edit Jar
       </h1>
     </div>
     <AppJarForm
@@ -36,7 +36,7 @@ function onSubmitComplete() {
       :initial-values="jarsStore.currentJar"
       :on-submit-complete
       submit-label="Update"
-      submit-icon="tabler:exchange"
+      submit-icon="JarUpdateIcon"
     />
   </div>
 </template>

@@ -29,6 +29,7 @@ effect(() => {
       id: "link-dashboard",
       label: "Jars",
       link: "/dashboard",
+      component: "JarsGroupIcon",
     }, {
       id: "link-jar-add",
       label: "New Jar",
