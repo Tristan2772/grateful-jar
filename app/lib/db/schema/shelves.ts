@@ -23,6 +23,7 @@ export const InsertShelf = createInsertSchema(shelves, {
 });
 
 export type InsertShelf = z.infer<typeof InsertShelf>;
+export type SelectShelf = typeof shelves.$inferSelect;
 
 export const shelvesRelations = relations(shelves, ({ many }) => ({
   jars: many(jars),

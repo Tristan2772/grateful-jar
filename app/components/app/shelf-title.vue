@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 const props = defineProps<{
   isFirstShelf?: boolean;
+  shelfId?: number;
 }>();
 </script>
 
@@ -16,7 +17,11 @@ const props = defineProps<{
         <Icon name="tabler:dots-vertical" size="18" />
       </div>
       <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm mb-2">
-        <li><a>Edit</a></li>
+        <li>
+          <NuxtLink :to="`/dashboard/shelves/${props.shelfId}/edit`">
+            Edit
+          </NuxtLink>
+        </li>
         <li><a><Icon name="tabler:trash-x-filled" size="24" />Delete</a></li>
       </ul>
     </div>

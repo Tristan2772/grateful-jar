@@ -4,6 +4,7 @@ import type { Jar } from "~/lib/types";
 const props = defineProps<{
   isFirstShelf?: boolean;
   jarsList?: Jar[];
+  shelfId?: number;
 }>();
 
 const jarsStore = useJarsStore();
@@ -39,7 +40,7 @@ const jarsStore = useJarsStore();
         </NuxtLink>
       </div>
     </div>
-    <AppShelfTitle :is-first-shelf>
+    <AppShelfTitle :is-first-shelf :shelf-id>
       <slot />
     </AppShelfTitle>
   </div>
@@ -59,7 +60,7 @@ const jarsStore = useJarsStore();
         </div>
       </div>
     </div>
-    <AppShelfTitle>
+    <AppShelfTitle :shelf-id>
       <slot />
     </AppShelfTitle>
   </div>

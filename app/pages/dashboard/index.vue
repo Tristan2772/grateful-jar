@@ -31,6 +31,7 @@ onBeforeMount(() => {
         <AppShelfWithJars
           v-for="shelf in shelves"
           :key="shelf.id"
+          :shelf-id="shelf.id"
           :jars-list="getJarsOnShelf(shelf.id)"
         >
           {{ shelf.name }}
