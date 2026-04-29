@@ -27,3 +27,13 @@ export async function insertShelf(insertable: InsertShelf, userId: number) {
   }).returning();
   return created;
 }
+
+export async function updateShelfById(updates: InsertShelf, id: number, userId: number) {
+  const [updated] = await db.update(shelves).set(updates).where(
+    and(
+      eq(shelves.id, id),
+      eq(shelves.userId, userId),
+    ),
+  ).returning();
+  return updated;
+}

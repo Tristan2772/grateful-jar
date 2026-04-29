@@ -9,7 +9,7 @@ import { useForm } from "vee-validate";
 const props = defineProps<{
   initialValues: T;
   submitLabel: string;
-  submitIcon: "JarUpdateIcon" | "NoteUpdateIcon" | "tabler:plus";
+  submitIcon: "ShelfUpdateIcon" | "JarUpdateIcon" | "NoteUpdateIcon" | "tabler:plus";
   schema: ZodType;
   onSubmit: (jar: T) => Promise<any>;
   onSubmitComplete: () => void;

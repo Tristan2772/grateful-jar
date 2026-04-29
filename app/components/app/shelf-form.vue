@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { InsertJar } from "~/lib/db/schema";
+import { InsertShelf } from "~/lib/db/schema";
 
 const props = defineProps<{
-  initialValues?: InsertJar;
+  initialValues?: InsertShelf;
   submitLabel: string;
   submitIcon: "JarUpdateIcon" | "tabler:plus";
-  onSubmit: (jar: InsertJar) => Promise<any>;
+  onSubmit: (shelf: InsertShelf) => Promise<any>;
   onSubmitComplete: () => void;
 }>();
 </script>
@@ -13,11 +13,9 @@ const props = defineProps<{
 <template>
   <AppJarBaseForm
     v-slot="{ errors, loading }"
-    :schema="InsertJar"
+    :schema="InsertShelf"
     :initial-values="props.initialValues || {
       name: '',
-      description: '',
-      shelf: undefined,
     }"
     :on-submit
     :on-submit-complete
@@ -28,20 +26,6 @@ const props = defineProps<{
       label="Name"
       name="name"
       :error="errors.name"
-      :disabled="loading"
-    />
-    <AppFormField
-      label="Description"
-      name="description"
-      type="textarea"
-      :error="errors.description"
-      :disabled="loading"
-    />
-    <AppSelectFormField
-      label="Shelf"
-      name="shelf"
-      :initial-shelf-id="initialValues?.shelf"
-      :error="errors.shelf"
       :disabled="loading"
     />
   </AppJarBaseForm>

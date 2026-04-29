@@ -25,9 +25,11 @@ export const jars = sqliteTable("jars", {
 export const InsertJar = createInsertSchema(jars, {
   name: z.string().min(1).max(100),
   description: z.string().max(1000).optional().nullable(),
+  shelf: z.int().optional().nullable(),
 }).pick({
   name: true,
   description: true,
+  shelf: true,
 });
 
 export const JarsRelations = relations(jars, ({ one, many }) => ({
