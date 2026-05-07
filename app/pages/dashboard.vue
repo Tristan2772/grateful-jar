@@ -15,7 +15,7 @@ if (CURRENT_JAR_PAGES.has(route.name?.toString() || "")) {
   await jarsStore.currentJarRefresh();
 }
 if (CURRENT_NOTE_PAGES.has(route.name?.toString() || "")) {
-  await jarsStore.currentJarRefresh();
+  await jarsStore.currentNoteRefresh();
 }
 
 onMounted(() => {
@@ -100,9 +100,10 @@ effect(() => {
         id: "link-note",
         label: currentNote.value.name,
         to: {
-          name: "dashboard-jars-slug",
+          name: "dashboard-jars-slug-id",
           params: {
             slug: route.params.slug,
+            id: route.params.id,
           },
         },
         icon: "tabler:file-text",
@@ -131,7 +132,7 @@ effect(() => {
       <div class="bg-base-100 transition-all duration-300 top-16 fixed bottom-0 left-0 z-50" :class="{ 'min-w-64 max-w-64': sidebarStore.isSidebarOpen, 'min-w-16 max-w-16': !sidebarStore.isSidebarOpen }">
         <!-- ------------------------- top of Sidebar ------------------------------ -->
         <div
-          class="flex p-2 hover:bg-base-300 hover:cursor-pointer"
+          class="flex p-2 rounded-lg hover:bg-base-300 hover:cursor-pointer"
           :class="{ 'justify-center': !sidebarStore.isSidebarOpen, 'justify-end': sidebarStore.isSidebarOpen }"
           @click="sidebarStore.toggleSidebar()"
         >

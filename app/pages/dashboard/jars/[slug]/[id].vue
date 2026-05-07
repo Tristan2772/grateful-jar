@@ -34,13 +34,14 @@ async function confirmDelete() {
 }
 
 onMounted(() => {
-  setTimeout(() => {
-    jarStore.currentNoteRefresh();
-  }, 0);
+  setTimeout(
+    jarStore.currentNoteRefresh,
+    0,
+  );
 });
 
 onBeforeRouteUpdate((to) => {
-  if (to.name === "dashboard-jars-slug-id") {
+  if (to.name === "dashboard-location-slug-id") {
     jarStore.currentNoteRefresh();
   }
 });

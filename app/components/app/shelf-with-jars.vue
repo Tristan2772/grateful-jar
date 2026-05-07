@@ -31,11 +31,13 @@ const jarsStore = useJarsStore();
           @mouseenter="jarsStore.hoveredJarName = jar.name"
           @mouseleave="jarsStore.hoveredJarName = ''"
         >
-          <div class="card-body text-center">
-            <h3 class="text-xl">
+          <div class="flex flex-col pt-6 px-4 gap-4 text-center">
+            <h3 class="text-xl line-clamp-2">
               {{ jar.name }}
             </h3>
-            <p>{{ jar.description }}</p>
+            <p class="text-md line-clamp-4">
+              {{ jar.description }}
+            </p>
           </div>
         </NuxtLink>
       </div>

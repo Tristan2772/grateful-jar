@@ -20,6 +20,15 @@ export async function findShelfByName(existing: InsertShelf, userId: number) {
   });
 }
 
+export async function findShelfById(shelfId: number, userId: number) {
+  return db.query.shelves.findFirst({
+    where: and(
+      eq(shelves.id, shelfId),
+      eq(shelves.userId, userId),
+    ),
+  });
+}
+
 export async function insertShelf(insertable: InsertShelf, userId: number) {
   const [created] = await db.insert(shelves).values({
     ...insertable,

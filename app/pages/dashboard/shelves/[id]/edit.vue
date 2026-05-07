@@ -20,7 +20,9 @@ function onSubmitComplete() {
 }
 
 onMounted(() => {
-  shelvesStore.currentShelfRefresh();
+  setTimeout(() => {
+    shelvesStore.currentShelfRefresh();
+  }, 0);
 });
 
 onBeforeRouteUpdate((to) => {

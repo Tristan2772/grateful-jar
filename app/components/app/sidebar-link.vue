@@ -12,6 +12,7 @@ const props = defineProps<{
 }>();
 
 const route = useRoute();
+const router = useRouter();
 </script>
 
 <template>
@@ -23,7 +24,7 @@ const route = useRoute();
     <NuxtLink
       :to="props.link || props.to"
       class="btn btn-ghost gap-2 p-2 bg-base-100 hover:bg-base-300 w-full flex"
-      :class="{ 'bg-base-200': route.path === props.link, 'bg-base-300': isHoveredJar, 'justify-center': !showLabel, 'justify-start': showLabel }"
+      :class="{ 'bg-base-200': route.path === props.link || (props.to ? route.path === router.resolve(props.to).path : false), 'bg-base-300': isHoveredJar, 'justify-center': !showLabel, 'justify-start': showLabel }"
     >
       <AppJarIcon v-if="(!props.icon && !props.component) || props.component === 'JarIcon'" class="shrink-0" />
       <AppJarSettingsIcon v-if="props.component === 'JarSettingsIcon'" class="shrink-0" />
@@ -37,8 +38,8 @@ const route = useRoute();
         class="shrink-0"
         size="24"
       />
-      <Transition name="grow">
-        <span v-if="props.showLabel" class="truncate">
+      <Transition name="grow" class="truncate">
+        <span v-if="props.showLabel">
           {{ props.label }}
         </span>
       </Transition>

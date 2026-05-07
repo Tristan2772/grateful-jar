@@ -43,7 +43,15 @@ onMounted(() => {
 
 onBeforeRouteUpdate((to) => {
   if (to.name === "dashboard-jars-slug") {
-    jarStore.currentJarRefresh();
+    setTimeout(() => {
+      jarStore.currentJarRefresh();
+      navigateTo({
+        name: "dashboard-jars-slug",
+        params: {
+          slug: route.params.slug,
+        },
+      });
+    }, 1);
   }
 });
 </script>
@@ -61,43 +69,45 @@ onBeforeRouteUpdate((to) => {
     </div>
     <div v-if="route.name === 'dashboard-jars-slug' && jar && !loading">
       <div class="flex pb-40">
-        <div class="flex flex-col gap-2 pt-20 items-center text-center fixed bottom-0 right-3 z-20 transition-all duration-300 bg-linear-to-b from-transparent to-base-300 to-55%" :class="{ 'left-16': !sidebarStore.isSidebarOpen, 'left-64': sidebarStore.isSidebarOpen }">
-          <h2 class="text-2xl flex items-center gap-2">
-            {{ jar.name }}
-            <div class="dropdown dropdown-top dropdown-start">
-              <div
-                tabindex="0"
-                role="button"
-                class="btn btn-sm btn-ghost hover:bg-base-100 p-2"
-              >
-                <Icon name="tabler:dots-vertical" size="18" />
+        <div class="flex flex-col gap-2 pt-20 items-center text-center fixed bottom-0 right-3 z-20 transition-all duration-300 bg-linear-to-b from-transparent to-base-300 to-55% pointer-events-none" :class="{ 'left-16': !sidebarStore.isSidebarOpen, 'left-64': sidebarStore.isSidebarOpen }">
+          <div class="w-full pointer-events-auto flex flex-col gap-2 justify-center items-center">
+            <h2 class="text-2xl flex items-center gap-2">
+              {{ jar.name }}
+              <div class="dropdown dropdown-top dropdown-end">
+                <div
+                  tabindex="0"
+                  role="button"
+                  class="btn btn-sm btn-ghost hover:bg-base-100 p-2"
+                >
+                  <Icon name="tabler:dots-vertical" size="18" />
+                </div>
+                <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm mb-2">
+                  <li>
+                    <NuxtLink
+                      :to="{
+                        name: 'dashboard-jars-slug-edit',
+                        params: {
+                          slug: route.params.slug,
+                        },
+                      }"
+                    >
+                      <AppJarSettingsIcon />
+                      Edit
+                    </NuxtLink>
+                  </li>
+                  <li>
+                    <NuxtLink to="" @click="openDialog">
+                      <Icon name="tabler:trash-x-filled" size="24" />
+                      Delete
+                    </NuxtLink>
+                  </li>
+                </ul>
               </div>
-              <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm mb-2">
-                <li>
-                  <NuxtLink
-                    :to="{
-                      name: 'dashboard-jars-slug-edit',
-                      params: {
-                        slug: route.params.slug,
-                      },
-                    }"
-                  >
-                    <AppJarSettingsIcon />
-                    Edit
-                  </NuxtLink>
-                </li>
-                <li>
-                  <NuxtLink to="" @click="openDialog">
-                    <Icon name="tabler:trash-x-filled" size="24" />
-                    Delete
-                  </NuxtLink>
-                </li>
-              </ul>
-            </div>
-          </h2>
-          <p class="text-sm min-h-16">
-            {{ jar.description }}
-          </p>
+            </h2>
+            <p class="text-sm min-h-16">
+              {{ jar.description }}
+            </p>
+          </div>
         </div>
         <div class="p-4 flex w-full">
           <!-- ----------------if there are no notes for this jar ----------------------- -->
@@ -114,7 +124,7 @@ onBeforeRouteUpdate((to) => {
           </div>
 
           <!-- ---------------------------- if there are notes ---------------------------- -->
-          <div v-if="jar.jarNotes.length > 0" class="flex flex-wrap gap-4">
+          <div v-if="jar.jarNotes.length > 0" class="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4 w-full">
             <AppJarNote
               v-for="note in jar.jarNotes"
               :key="note.id"
