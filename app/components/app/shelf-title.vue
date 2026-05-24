@@ -6,8 +6,8 @@ const props = defineProps<{
 </script>
 
 <template>
-  <h2 class="text-center bg-base-200 text-lg py-2 relative">
-    <slot />
+  <h2 class="text-center bg-base-200 text-lg py-2 relative flex items-center justify-center">
+    <span class="truncate px-8 pr-12"><slot /></span>
     <div v-if="!props.isFirstShelf" class="dropdown dropdown-top dropdown-end absolute right-2 top-1.5">
       <div
         tabindex="0"
@@ -16,7 +16,7 @@ const props = defineProps<{
       >
         <Icon name="tabler:dots-vertical" size="18" />
       </div>
-      <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm mb-2">
+      <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm mb-3">
         <li>
           <NuxtLink :to="`/dashboard/shelves/${props.shelfId}/edit`">
             Edit

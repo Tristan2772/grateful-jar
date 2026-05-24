@@ -5,6 +5,7 @@ const props = defineProps<{
   description: string | null;
   startedAt: number;
   endedAt: number;
+  isHovered?: boolean;
 }>();
 
 const route = useRoute();
@@ -24,7 +25,7 @@ const route = useRoute();
           {{ formatDateYearLast(props.startedAt) }}
         </span>
       </p>
-      <h3 class="text-xl border-b-4 border-double min-h-16 max-h-16 line-clamp-2">
+      <h3 class="text-xl border-b-4 border-double min-h-16 max-h-16 line-clamp-2 transition-colors duration-300" :class="{ 'text-secondary': props.isHovered }">
         {{ props.name }}
       </h3>
     </div>

@@ -2,7 +2,7 @@
 import type { FetchError } from "ofetch";
 
 const jarStore = useJarsStore();
-const { currentJar: jar, currentJarError: error, currentJarStatus: status, hoveredJarName } = storeToRefs(jarStore);
+const { currentJar: jar, currentJarError: error, currentJarStatus: status, hoveredId } = storeToRefs(jarStore);
 const route = useRoute();
 const isOpen = ref(false);
 
@@ -36,8 +36,10 @@ async function confirmDelete() {
 const sidebarStore = useSidebarStore();
 
 onMounted(() => {
+  window.addEventListener("resize", checkOverflow);
   setTimeout(() => {
     jarStore.currentJarRefresh();
+    checkOverflow();
   }, 0);
 });
 
@@ -54,6 +56,31 @@ onBeforeRouteUpdate((to) => {
     }, 1);
   }
 });
+
+const descriptionRef = ref<HTMLParagraphElement | null>(null);
+const isOverflowing = ref(false);
+const isExpanded = ref(false);
+
+function checkOverflow() {
+  if (descriptionRef.value) {
+    isOverflowing.value = descriptionRef.value.scrollHeight > descriptionRef.value.clientHeight;
+  }
+}
+
+watch(jar, () => {
+  isExpanded.value = false;
+  nextTick(checkOverflow);
+});
+
+watch(isExpanded, (val) => {
+  if (!val && descriptionRef.value) {
+    descriptionRef.value.scrollTop = 0;
+  }
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", checkOverflow);
+});
 </script>
 
 <template>
@@ -69,10 +96,27 @@ onBeforeRouteUpdate((to) => {
     </div>
     <div v-if="route.name === 'dashboard-jars-slug' && jar && !loading">
       <div class="flex pb-40">
-        <div class="flex flex-col gap-2 pt-20 items-center text-center fixed bottom-0 right-3 z-20 transition-all duration-300 bg-linear-to-b from-transparent to-base-300 to-55% pointer-events-none" :class="{ 'left-16': !sidebarStore.isSidebarOpen, 'left-64': sidebarStore.isSidebarOpen }">
-          <div class="w-full pointer-events-auto flex flex-col gap-2 justify-center items-center">
-            <h2 class="text-2xl flex items-center gap-2">
-              {{ jar.name }}
+        <div class="flex flex-col gap-2 items-center text-center fixed bottom-0 z-10 pt-20 transition-all duration-300 pointer-events-none max-h-[80vh]" :class="{ 'left-16': !sidebarStore.isSidebarOpen, 'left-64': sidebarStore.isSidebarOpen, 'right-3': !isExpanded }">
+          <div class="w-full pointer-events-auto flex flex-col gap-2 justify-center items-center pt-5 bg-linear-to-b from-transparent to-base-300" :class="isExpanded ? 'to-10%' : 'to-20%' ">
+            <h2 class="text-2xl flex items-center gap-2 text-balance">
+              <span :class="{ 'line-clamp-2': !isExpanded }">{{ jar.name }}</span>
+              <!-- ------ expansion button ------- -->
+              <button
+                v-if="isOverflowing"
+                class="btn btn-ghost hover:bg-base-100 p-2"
+                @click="isExpanded = !isExpanded"
+              >
+                <Icon
+                  v-if="!isExpanded"
+                  size="18"
+                  name="tabler:layout-bottombar-expand-filled"
+                />
+                <Icon
+                  v-if="isExpanded"
+                  size="18"
+                  name="tabler:layout-navbar-expand-filled"
+                />
+              </button>
               <div class="dropdown dropdown-top dropdown-end">
                 <div
                   tabindex="0"
@@ -104,7 +148,11 @@ onBeforeRouteUpdate((to) => {
                 </ul>
               </div>
             </h2>
-            <p class="text-sm min-h-16">
+            <p
+              ref="descriptionRef"
+              class="text-sm min-h-14 pb-2 text-pretty"
+              :class="isExpanded ? 'overflow-y-auto max-h-54' : 'max-h-21 line-clamp-4'"
+            >
               {{ jar.description }}
             </p>
           </div>
@@ -133,10 +181,11 @@ onBeforeRouteUpdate((to) => {
               :description="note.description"
               :started-at="note.startedAt"
               :ended-at="note.endedAt"
-              class="zig-zag"
-              :class="hoveredJarName === note.name ? 'border-2 border-primary' : 'border-0' "
-              @mouseenter="hoveredJarName = note.name"
-              @mouseleave="hoveredJarName = ''"
+              :is-hovered="hoveredId === `note-${note.id}`"
+              class="zig-zag transition-all duration-300"
+              :class="{ 'scale-105': hoveredId === `note-${note.id}` }"
+              @mouseenter="hoveredId = `note-${note.id}`"
+              @mouseleave="hoveredId = ''"
             />
           </div>
         </div>

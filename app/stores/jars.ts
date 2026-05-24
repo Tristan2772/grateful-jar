@@ -61,9 +61,9 @@ export const useJarsStore = defineStore("useJarsStore", () => {
     sidebarStore.loading = allJarsStatus.value === "pending" || currentJarStatus.value === "pending";
   });
 
-  const hoveredJarName = ref<string | null>(null);
+  const hoveredId = ref<string>("");
   return {
-    hoveredJarName,
+    hoveredId,
     allJars,
     allJarsStatus,
     allJarsRefresh,

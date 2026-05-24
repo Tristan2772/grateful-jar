@@ -27,15 +27,15 @@ const jarsStore = useJarsStore();
             params: { slug: jar.slug },
           }"
           class="flex flex-col card-compact max-h-65 min-h-65 aspect-square rounded-full p-3 border-2 border-solid"
-          :class="jarsStore.hoveredJarName === jar.name ? 'border-primary bg-base-300' : 'bg-base-100' "
-          @mouseenter="jarsStore.hoveredJarName = jar.name"
-          @mouseleave="jarsStore.hoveredJarName = ''"
+          :class="jarsStore.hoveredId === `jar-${jar.id}` ? 'border-primary bg-base-300' : 'bg-base-100' "
+          @mouseenter="jarsStore.hoveredId = `jar-${jar.id}`"
+          @mouseleave="jarsStore.hoveredId = ''"
         >
-          <div class="flex flex-col pt-6 px-4 gap-4 text-center">
-            <h3 class="text-xl line-clamp-2">
+          <div class="flex flex-col pt-6 px-4 gap-2 text-center">
+            <h3 class="text-xl line-clamp-2 text-pretty relative min-h-14 jar-header">
               {{ jar.name }}
             </h3>
-            <p class="text-md line-clamp-4">
+            <p class="text-md line-clamp-4 text-pretty">
               {{ jar.description }}
             </p>
           </div>
@@ -52,7 +52,7 @@ const jarsStore = useJarsStore();
     <div class="p-4">
       <div class="flex card-compact bg-base-100 max-h-65 min-h-65 aspect-square rounded-full p-3 border-2 border-dashed">
         <div class="card-body text-center flex flex-col items-center justify-center gap-4">
-          <p class="text-lg max-h-fit">
+          <p class="text-lg max-h-fit text-pretty">
             Add a new jar to this shelf.
           </p>
           <NuxtLink to="/dashboard/add-jar" class="btn btn-secondary w-40">
@@ -67,3 +67,14 @@ const jarsStore = useJarsStore();
     </AppShelfTitle>
   </div>
 </template>
+
+<style scoped>
+.jar-header::before {
+  content: "______________________ _________________________";
+  color: gray;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 2px;
+}
+</style>
