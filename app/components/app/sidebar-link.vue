@@ -2,6 +2,7 @@
 import type { RouteLocationRaw } from "vue-router";
 
 const props = defineProps<{
+  linkId?: string;
   label: string;
   link?: string;
   to?: RouteLocationRaw;
@@ -12,18 +13,28 @@ const props = defineProps<{
 }>();
 
 const route = useRoute();
+const router = useRouter();
+
+const popoverRef = useTemplateRef<HTMLDivElement>("popover");
+
+function showPopover() {
+  if (!props.showLabel) {
+    popoverRef.value?.togglePopover(true);
+  }
+}
+
+function hidePopover() {
+  popoverRef.value?.togglePopover(false);
+}
 </script>
 
 <template>
-  <div
-    class="tooltip-right"
-    :data-tip="showLabel ? undefined : props.label"
-    :class="{ tooltip: !showLabel }"
-  >
+  <div @mouseenter="showPopover" @mouseleave="hidePopover">
     <NuxtLink
       :to="props.link || props.to"
       class="btn btn-ghost gap-2 p-2 bg-base-100 hover:bg-base-300 w-full flex"
-      :class="{ 'bg-base-200': route.path === props.link, 'bg-base-300': isHoveredJar, 'justify-center': !showLabel, 'justify-start': showLabel }"
+      :class="{ 'bg-base-200': route.path === props.link || (props.to ? route.path === router.resolve(props.to).path : false), 'bg-base-300': isHoveredJar, 'justify-center': !showLabel, 'justify-start': showLabel }"
+      :style="`anchor-name:--anchor-${linkId}`"
     >
       <AppJarIcon v-if="(!props.icon && !props.component) || props.component === 'JarIcon'" class="shrink-0" />
       <AppJarSettingsIcon v-if="props.component === 'JarSettingsIcon'" class="shrink-0" />
@@ -37,16 +48,47 @@ const route = useRoute();
         class="shrink-0"
         size="24"
       />
-      <Transition name="grow">
-        <span v-if="props.showLabel" class="truncate">
+      <Transition name="grow" class="truncate">
+        <span v-if="props.showLabel">
           {{ props.label }}
         </span>
       </Transition>
     </NuxtLink>
+    <div
+      :id="`popover-${linkId}`"
+      ref="popover"
+      class="max-w-52 rounded-box shadow-sm p-2 text-sm text-gray-300"
+      popover
+      :style="`position-anchor:--anchor-${linkId};background-color:var(--color-neutral);`"
+    >
+      {{ props.label }}
+    </div>
   </div>
 </template>
 
 <style scoped>
+[popover] {
+  position: fixed;
+  inset: unset;
+  top: anchor(center);
+  left: anchor(right);
+  translate: 0 -50%;
+  margin-left: 0.5rem;
+  border: none;
+  overflow: visible;
+}
+
+[popover]::before {
+  content: "";
+  position: absolute;
+  left: -0.3rem;
+  top: 50%;
+  translate: 0 -50%;
+  border: 0.5rem solid transparent;
+  border-right-color: var(--color-neutral);
+  border-left: none;
+}
+
 .grow-enter-active {
   animation: grow 0.3s ease-in;
 }

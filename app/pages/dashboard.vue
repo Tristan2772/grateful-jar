@@ -15,7 +15,7 @@ if (CURRENT_JAR_PAGES.has(route.name?.toString() || "")) {
   await jarsStore.currentJarRefresh();
 }
 if (CURRENT_NOTE_PAGES.has(route.name?.toString() || "")) {
-  await jarsStore.currentJarRefresh();
+  await jarsStore.currentNoteRefresh();
 }
 
 onMounted(() => {
@@ -100,9 +100,10 @@ effect(() => {
         id: "link-note",
         label: currentNote.value.name,
         to: {
-          name: "dashboard-jars-slug",
+          name: "dashboard-jars-slug-id",
           params: {
             slug: route.params.slug,
+            id: route.params.id,
           },
         },
         icon: "tabler:file-text",
@@ -128,10 +129,10 @@ effect(() => {
     <div class="flex h-full">
       <!-- --------------------------- side bar ----------------------------- -->
 
-      <div class="bg-base-100 transition-all duration-300 top-16 fixed bottom-0 left-0 z-50" :class="{ 'min-w-64 max-w-64': sidebarStore.isSidebarOpen, 'min-w-16 max-w-16': !sidebarStore.isSidebarOpen }">
+      <div class="bg-base-100 transition-all duration-300 top-16 fixed bottom-0 left-0 z-50 flex flex-col" :class="{ 'min-w-64 max-w-64': sidebarStore.isSidebarOpen, 'min-w-16 max-w-16': !sidebarStore.isSidebarOpen }">
         <!-- ------------------------- top of Sidebar ------------------------------ -->
         <div
-          class="flex p-2 hover:bg-base-300 hover:cursor-pointer"
+          class="flex p-2 rounded-lg hover:bg-base-300 hover:cursor-pointer shrink-0"
           :class="{ 'justify-center': !sidebarStore.isSidebarOpen, 'justify-end': sidebarStore.isSidebarOpen }"
           @click="sidebarStore.toggleSidebar()"
         >
@@ -141,10 +142,11 @@ effect(() => {
             class="btn btn-ghost"
           />
         </div>
-        <div class="flex flex-col">
+        <div class="shrink-0">
           <AppSidebarLink
             v-for="item in sidebarStore.sidebarTopItems"
             :key="item.id"
+            :link-id="item.id"
             :label="item.label"
             :link="item.link"
             :to="item.to"
@@ -152,29 +154,34 @@ effect(() => {
             :component="item.component"
             :show-label="sidebarStore.isSidebarOpen"
           />
+        </div>
 
-          <!-- --------------------- mid of Sidebar --------------------------------- -->
+        <!-- --------------------- mid of Sidebar --------------------------------- -->
 
-          <div v-if="sidebarStore.loading || sidebarStore.sidebarItems.length" class="divider" />
-          <div v-if="sidebarStore.loading" class="px-4">
+        <div v-if="sidebarStore.loading || sidebarStore.sidebarItems.length" class="flex flex-col flex-1 min-h-0">
+          <div class="divider shrink-0" />
+          <div v-if="sidebarStore.loading" class="px-4 shrink-0">
             <div class="skeleton h-4 w-full" />
           </div>
-          <div v-if="!sidebarStore.loading && sidebarStore.sidebarItems.length" class="flex flex-col">
+          <div v-if="!sidebarStore.loading && sidebarStore.sidebarItems.length" class="flex flex-col overflow-y-auto">
             <AppSidebarLink
               v-for="item in sidebarStore.sidebarItems"
               :key="item.id"
+              :link-id="item.id"
               :label="item.label"
               :to="item.to"
               :icon="item.icon"
               :component="item.component"
               :show-label="sidebarStore.isSidebarOpen"
-              :is-hovered-jar="jarsStore.hoveredJarName === item.label"
-              @mouseenter="jarsStore.hoveredJarName = item.label"
-              @mouseleave="jarsStore.hoveredJarName = ''"
+              :is-hovered-jar="jarsStore.hoveredId === item.id"
+              @mouseenter="jarsStore.hoveredId = item.id"
+              @mouseleave="jarsStore.hoveredId = ''"
             />
           </div>
+        </div>
 
-          <!-- ----------------------- bottom of Sidebar ----------------------- -->
+        <!-- ----------------------- bottom of Sidebar ----------------------- -->
+        <div class="shrink-0 mt-auto mb-4">
           <div class="divider" />
           <AppSidebarLink
             label="Sign Out"

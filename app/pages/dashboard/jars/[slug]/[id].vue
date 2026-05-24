@@ -34,15 +34,35 @@ async function confirmDelete() {
 }
 
 onMounted(() => {
+  window.addEventListener("resize", checkOverflow);
   setTimeout(() => {
     jarStore.currentNoteRefresh();
+    checkOverflow();
   }, 0);
 });
 
 onBeforeRouteUpdate((to) => {
-  if (to.name === "dashboard-jars-slug-id") {
+  if (to.name === "dashboard-location-slug-id") {
     jarStore.currentNoteRefresh();
   }
+});
+
+const descriptionRef = ref<HTMLParagraphElement | null>(null);
+const isOverflowing = ref(false);
+const isExpanded = ref(false);
+
+function checkOverflow() {
+  if (descriptionRef.value) {
+    isOverflowing.value = descriptionRef.value.scrollHeight > descriptionRef.value.clientHeight;
+  }
+}
+watch(note, () => {
+  isExpanded.value = false;
+  nextTick(checkOverflow);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", checkOverflow);
 });
 </script>
 
@@ -58,55 +78,106 @@ onBeforeRouteUpdate((to) => {
       </div>
     </div>
     <div v-if="route.name === 'dashboard-jars-slug-id' && note && !loading">
-      <div class="flex p-4">
-        <div class="flex flex-col gap-2 transition-all duration-300" :class="{ 'left-16': !sidebarStore.isSidebarOpen, 'left-64': sidebarStore.isSidebarOpen }">
-          <h2 class="text-2xl flex items-center gap-2">
-            {{ note.name }}
-            <div class="dropdown dropdown-bottom dropdown-start">
-              <div
-                tabindex="0"
-                role="button"
-                class="btn btn-sm btn-ghost hover:bg-base-100 p-2"
+      <div class="flex pb-40">
+        <!-- -------------------------------z index issue---------------------------- ---------------- -->
+        <div class="flex flex-col gap-2 items-center text-center fixed bottom-0 pt-20 z-10 transition-all duration-300 pointer-events-none max-h-[80vh]" :class="{ 'left-16': !sidebarStore.isSidebarOpen, 'left-64': sidebarStore.isSidebarOpen, 'right-3': !isExpanded }">
+          <div class="w-full pointer-events-auto flex flex-col gap-2 justify-center items-center pt-5 bg-linear-to-b from-transparent to-base-300" :class="isExpanded ? 'to-10%' : 'to-20%' ">
+            <h2 class="text-2xl flex items-center gap-2 text-balance">
+              <span :class="{ 'line-clamp-2': !isExpanded }">{{ note.name }}</span>
+              <!-- ------ expansion button ------- -->
+              <button
+                v-if="isOverflowing"
+                class="btn btn-ghost hover:bg-base-100 p-2"
+                @click="isExpanded = !isExpanded"
               >
-                <Icon name="tabler:dots-vertical" size="18" />
+                <Icon
+                  v-if="!isExpanded"
+                  size="18"
+                  name="tabler:layout-bottombar-expand-filled"
+                />
+                <Icon
+                  v-if="isExpanded"
+                  size="18"
+                  name="tabler:layout-navbar-expand-filled"
+                />
+              </button>
+              <div class="dropdown dropdown-top dropdown-end">
+                <div
+                  tabindex="0"
+                  role="button"
+                  class="btn btn-sm btn-ghost hover:bg-base-100 p-2"
+                >
+                  <Icon name="tabler:dots-vertical" size="18" />
+                </div>
+                <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm mb-2">
+                  <li>
+                    <NuxtLink
+                      :to="{
+                        name: 'dashboard-jars-slug-id-edit',
+                        params: {
+                          slug: route.params.slug,
+                          id: note.id,
+                        },
+                      }"
+                    >
+                      <AppJarSettingsIcon />
+                      Edit
+                    </NuxtLink>
+                  </li>
+                  <li>
+                    <NuxtLink to="" @click="openDialog">
+                      <Icon name="tabler:trash-x-filled" size="24" />
+                      Delete
+                    </NuxtLink>
+                  </li>
+                </ul>
               </div>
-              <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm mb-2">
-                <li>
-                  <NuxtLink
-                    :to="{
-                      name: 'dashboard-jars-slug-id-edit',
-                      params: {
-                        slug: route.params.slug,
-                        id: note.id,
-                      },
-                    }"
-                  >
-                    <AppJarSettingsIcon />
-                    Edit
-                  </NuxtLink>
-                </li>
-                <li>
-                  <NuxtLink to="" @click="openDialog">
-                    <Icon name="tabler:trash-x-filled" size="24" />
-                    Delete
-                  </NuxtLink>
-                </li>
-              </ul>
-            </div>
-          </h2>
-          <p class="text-sm italic text-gray-500">
-            <span v-if="note.startedAt !== note.endedAt">
-              {{ formatDateYearLast(note.startedAt) }} / {{ formatDateYearLast(note.endedAt) }}
-            </span>
-            <span v-else>
-              {{ formatDateYearLast(note.startedAt) }}
-            </span>
-          </p>
-          <p class="text-sm min-h-16">
-            {{ note.description }}
-          </p>
+            </h2>
+            <p class="text-sm italic text-gray-500">
+              <span v-if="note.startedAt !== note.endedAt">
+                {{ formatDateYearLast(note.startedAt) }} / {{ formatDateYearLast(note.endedAt) }}
+              </span>
+              <span v-else>
+                {{ formatDateYearLast(note.startedAt) }}
+              </span>
+            </p>
+            <p
+              ref="descriptionRef"
+              class="text-sm min-h-14 pb-2 text-pretty"
+              :class="isExpanded ? 'overflow-y-auto max-h-54' : 'max-h-21 line-clamp-4'"
+            >
+              {{ note.description }}
+            </p>
+          </div>
         </div>
-        <div class="p-4 flex w-full" />
+        <div class="p-4 flex w-full">
+          <!-- ----------------if there are no images for this note ----------------------- -->
+          <!-- <div v-if="!jar.jarNotes.length" class="zig-zag bg-base-100 h-35">
+            <div class="card-body text-center flex flex-col items-center justify-center gap-4">
+              <p class="text-lg max-h-fit">
+                Add a note to get started.
+              </p>
+              <NuxtLink :to="{ name: 'dashboard-jars-slug-add', params: { slug: route.params.slug } }" class="btn btn-secondary w-40">
+                Add Note
+                <Icon name="tabler:plus" size="24" />
+              </NuxtLink>
+            </div>
+          </div> -->
+
+          <!-- ---------------------------- if there are images ---------------------------- -->
+          <!-- <div v-if="jar.jarNotes.length > 0" class="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4 w-full">
+            <AppJarNote
+              v-for="note in jar.jarNotes"
+              :key="note.id"
+              :note-id="note.id"
+              :name="note.name"
+              :description="note.description"
+              :started-at="note.startedAt"
+              :ended-at="note.endedAt"
+              class="transition-all duration-300"
+            />
+          </div> -->
+        </div>
       </div>
     </div>
     <div v-if="route.name !== 'dashboard-jars-slug-id' && note && status !== 'pending'">
