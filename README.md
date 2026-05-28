@@ -4,6 +4,8 @@ Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduct
 
 ## Setup
 
+Create a `.env` file and update with your own values.
+
 Make sure to install dependencies:
 
 ```bash
