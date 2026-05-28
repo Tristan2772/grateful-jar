@@ -5,10 +5,10 @@ export default defineAuthenticatedEventHandler(async (event) => {
   const shelfId = Number(getRouterParam(event, "id"));
   const shelf = await findShelfById(shelfId, event.context.user.id);
   if (!shelf) {
-    return sendError(event, createError({
+    return createError({
       statusCode: 404,
       statusMessage: "Shelf not found.",
-    }));
+    });
   }
 
   return shelf;

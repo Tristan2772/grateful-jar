@@ -36,10 +36,10 @@ export default defineAuthenticatedEventHandler(async (event) => {
   if (!metadata
     || metadata["jar-note-id"] !== id
     || metadata["user-id"] !== event.context.user.id.toString()) {
-    return sendError(event, createError({
+    return createError({
       statusCode: 404,
       statusMessage: "Image not found",
-    }));
+    });
   }
 
   const inserted = await insertJarNoteImage(Number(id), result.data, event.context.user.id);

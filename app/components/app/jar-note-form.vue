@@ -9,19 +9,21 @@ const props = defineProps<{
   onSubmitComplete: () => void;
 }>();
 
-const initialValues = {
+const defaultValues: InsertJarNote = {
   name: "",
   description: "",
   startedAt: Date.now() - (24 * 60 * 60 * 1000),
   endedAt: Date.now(),
 };
+
+const formInitialValues = computed(() => props.initialValues || defaultValues);
 </script>
 
 <template>
   <AppJarBaseForm
     v-slot="{ errors, loading }"
     :schema="InsertJarNote"
-    :initial-values="props.initialValues || initialValues"
+    :initial-values="formInitialValues"
     :on-submit
     :on-submit-complete
     :submit-label
@@ -43,14 +45,14 @@ const initialValues = {
     <AppDateFormField
       label="Started At"
       name="startedAt"
-      :value="initialValues.startedAt"
+      :value="formInitialValues.startedAt"
       :error="errors.startedAt"
       :disabled="loading"
     />
     <AppDateFormField
       label="Ended At"
       name="endedAt"
-      :value="initialValues.endedAt"
+      :value="formInitialValues.endedAt"
       :error="errors.endedAt"
       :disabled="loading"
     />

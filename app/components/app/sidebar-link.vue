@@ -16,9 +16,27 @@ const route = useRoute();
 const router = useRouter();
 
 const popoverRef = useTemplateRef<HTMLDivElement>("popover");
+const supportsHover = ref(false);
+const hoverMediaQuery = ref<MediaQueryList | null>(null);
+
+function updateSupportsHover() {
+  if (hoverMediaQuery.value) {
+    supportsHover.value = hoverMediaQuery.value.matches;
+  }
+}
+
+onMounted(() => {
+  hoverMediaQuery.value = window.matchMedia("(hover: hover) and (pointer: fine)");
+  updateSupportsHover();
+  hoverMediaQuery.value.addEventListener("change", updateSupportsHover);
+});
+
+onBeforeUnmount(() => {
+  hoverMediaQuery.value?.removeEventListener("change", updateSupportsHover);
+});
 
 function showPopover() {
-  if (!props.showLabel) {
+  if (!props.showLabel && supportsHover.value) {
     popoverRef.value?.togglePopover(true);
   }
 }
@@ -55,6 +73,7 @@ function hidePopover() {
       </Transition>
     </NuxtLink>
     <div
+      v-if="supportsHover"
       :id="`popover-${linkId}`"
       ref="popover"
       class="max-w-52 rounded-box shadow-sm p-2 text-sm text-gray-300"

@@ -2,6 +2,22 @@
 import type { InsertJar } from "~/lib/db/schema";
 
 const { $csrfFetch } = useNuxtApp() as any;
+const route = useRoute();
+
+const initialShelfId = computed<number | undefined>(() => {
+  const rawShelf = route.query.shelf;
+  const shelf = Array.isArray(rawShelf) ? rawShelf[0] : rawShelf;
+  if (shelf === undefined) {
+    return undefined;
+  }
+
+  const parsedShelfId = Number(shelf);
+  if (!Number.isInteger(parsedShelfId) || parsedShelfId <= 0) {
+    return undefined;
+  }
+
+  return parsedShelfId;
+});
 
 async function onSubmit(values: InsertJar) {
   await $csrfFetch("/api/jars", {
@@ -27,6 +43,7 @@ function onSubmitComplete() {
     </div>
     <AppJarForm
       :on-submit
+      :initial-shelf-id="initialShelfId"
       submit-label="Add"
       submit-icon="tabler:plus"
       :on-submit-complete

@@ -96,7 +96,7 @@ onBeforeUnmount(() => {
     </div>
     <div v-if="route.name === 'dashboard-jars-slug' && jar && !loading">
       <div class="flex pb-40">
-        <div class="flex flex-col gap-2 items-center text-center fixed bottom-0 z-10 pt-20 transition-all duration-300 pointer-events-none max-h-[80vh]" :class="{ 'left-16': !sidebarStore.isSidebarOpen, 'left-64': sidebarStore.isSidebarOpen, 'right-3': !isExpanded }">
+        <div class="flex flex-col gap-2 items-center text-center fixed bottom-0 z-10 pt-20 transition-all duration-300 pointer-events-none max-h-[80vh]" :class="{ 'left-16': !sidebarStore.isSidebarOpen, 'left-16 md:left-64': sidebarStore.isSidebarOpen, 'right-3': !isExpanded }">
           <div class="w-full pointer-events-auto flex flex-col gap-2 justify-center items-center pt-5 bg-linear-to-b from-transparent to-base-300" :class="isExpanded ? 'to-7%' : 'to-15%' ">
             <h2 class="text-2xl flex items-center gap-2 text-balance">
               <span :class="{ 'line-clamp-2': !isExpanded }">{{ jar.name }}</span>
@@ -125,7 +125,7 @@ onBeforeUnmount(() => {
                 >
                   <Icon name="tabler:dots-vertical" size="18" />
                 </div>
-                <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm mb-2">
+                <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm mb-2  border-2 border-secondary">
                   <li>
                     <NuxtLink
                       :to="{
@@ -150,8 +150,8 @@ onBeforeUnmount(() => {
             </h2>
             <p
               ref="descriptionRef"
-              class="text-sm mb-4 p-2 text-pretty"
-              :class="isExpanded ? 'overflow-y-auto max-h-54' : 'max-h-20 line-clamp-4'"
+              class="text-sm mb-4 p-2 pb-0 text-pretty"
+              :class="isExpanded ? 'overflow-y-auto max-h-54' : 'line-clamp-4'"
             >
               {{ jar.description }}
             </p>

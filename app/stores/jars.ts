@@ -1,4 +1,4 @@
-import type { SelectJarNoteWithImages, SelectJarWithNotes } from "~/lib/db/schema";
+import type { SelectJar, SelectJarNoteWithImages, SelectJarWithNotes } from "~/lib/db/schema";
 
 import { CURRENT_JAR_PAGES, CURRENT_NOTE_PAGES, DASHBOARD_PAGES } from "~/lib/constants";
 
@@ -8,7 +8,7 @@ export const useJarsStore = defineStore("useJarsStore", () => {
   const noteUrlWithSlugAndId = computed(() => `/api/jars/${route.params.slug}/${route.params.id}`);
 
   const { data: allJars, status: allJarsStatus, refresh: allJarsRefresh,
-  } = useFetch("/api/jars", {
+  } = useFetch<SelectJar[]>("/api/jars", {
     lazy: true,
   });
 

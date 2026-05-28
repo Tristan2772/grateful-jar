@@ -8,6 +8,26 @@ const props = defineProps<{
 }>();
 
 const jarsStore = useJarsStore();
+const shelvesStore = useShelvesStore();
+const { shelves } = storeToRefs(shelvesStore);
+
+const addJarTo = computed(() => {
+  if (typeof props.shelfId !== "number") {
+    return "/dashboard/add-jar";
+  }
+
+  const shelfExists = (shelves.value ?? []).some(shelf => shelf.id === props.shelfId);
+  if (!shelfExists) {
+    return "/dashboard/add-jar";
+  }
+
+  return {
+    path: "/dashboard/add-jar",
+    query: {
+      shelf: props.shelfId.toString(),
+    },
+  };
+});
 </script>
 
 <template>
@@ -55,7 +75,10 @@ const jarsStore = useJarsStore();
           <p class="text-lg max-h-fit text-pretty">
             Add a new jar to this shelf.
           </p>
-          <NuxtLink to="/dashboard/add-jar" class="btn btn-secondary w-40">
+          <NuxtLink
+            :to="addJarTo"
+            class="btn btn-secondary w-40"
+          >
             Add Jar
             <Icon name="tabler:plus" size="24" />
           </NuxtLink>

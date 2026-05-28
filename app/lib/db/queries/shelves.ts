@@ -46,3 +46,13 @@ export async function updateShelfById(updates: InsertShelf, id: number, userId: 
   ).returning();
   return updated;
 }
+
+export async function deleteShelfById(shelfId: number, userId: number) {
+  const [deleted] = await db.delete(shelves).where(
+    and(
+      eq(shelves.id, shelfId),
+      eq(shelves.userId, userId),
+    ),
+  ).returning();
+  return deleted;
+}

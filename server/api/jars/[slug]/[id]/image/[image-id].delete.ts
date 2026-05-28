@@ -10,10 +10,10 @@ export default defineAuthenticatedEventHandler(async (event) => {
   const imageId = getRouterParam(event, "image-id") as string;
 
   if (!z.coerce.number().safeParse(imageId).success) {
-    return sendError(event, createError({
+    return createError({
       statusCode: 422,
       statusMessage: "Invalid Image Id.",
-    }));
+    });
   }
 
   const slug = getRouterParam(event, "slug") as string;

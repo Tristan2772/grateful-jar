@@ -4,7 +4,7 @@ export const useShelvesStore = defineStore("useShelvesStore", () => {
   const route = useRoute();
   const shelfUrlWithId = computed(() => `/api/shelves/${route.params.id}`);
 
-  const { data, status, refresh } = useFetch("/api/shelves", {
+  const { data, status, refresh } = useFetch<SelectShelf[]>("/api/shelves", {
     lazy: true,
   });
 

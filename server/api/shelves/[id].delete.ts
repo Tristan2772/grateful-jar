@@ -1,15 +1,15 @@
-import { removeJarBySlug } from "~/lib/db/queries/jars";
+import { deleteShelfById } from "~/lib/db/queries/shelves";
 import defineAuthenticatedEventHandler from "~/utils/define-authenticated-event-handler";
 
 export default defineAuthenticatedEventHandler(async (event) => {
-  const slug = getRouterParam(event, "slug") as string;
+  const id = getRouterParam(event, "id");
 
-  const deleted = await removeJarBySlug(slug, event.context.user.id);
+  const deleted = await deleteShelfById(Number(id), event.context.user.id);
 
   if (!deleted) {
-    return createError({
+    throw createError({
       statusCode: 404,
-      statusMessage: "Jar not found",
+      statusMessage: "Shelf not found",
     });
   }
 
