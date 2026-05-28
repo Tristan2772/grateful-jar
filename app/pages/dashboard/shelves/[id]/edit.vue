@@ -45,7 +45,7 @@ onBeforeRouteUpdate((to) => {
       :on-submit
       :on-submit-complete
       submit-label="Update"
-      submit-icon="JarUpdateIcon"
+      submit-icon="ShelfUpdateIcon"
     />
   </div>
 </template>

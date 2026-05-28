@@ -3,6 +3,7 @@ import { InsertJar } from "~/lib/db/schema";
 
 const props = defineProps<{
   initialValues?: InsertJar;
+  initialShelfId?: number;
   submitLabel: string;
   submitIcon: "JarUpdateIcon" | "tabler:plus";
   onSubmit: (jar: InsertJar) => Promise<any>;
@@ -17,7 +18,7 @@ const props = defineProps<{
     :initial-values="props.initialValues || {
       name: '',
       description: '',
-      shelf: undefined,
+      shelf: props.initialShelfId,
     }"
     :on-submit
     :on-submit-complete
@@ -40,7 +41,7 @@ const props = defineProps<{
     <AppSelectFormField
       label="Shelf"
       name="shelf"
-      :initial-shelf-id="initialValues?.shelf"
+      :initial-shelf-id="props.initialShelfId ?? props.initialValues?.shelf"
       :error="errors.shelf"
       :disabled="loading"
     />

@@ -84,6 +84,7 @@ onBeforeRouteLeave(() => {
         {{ props.submitLabel }}
         <span v-if="loading" class="loading loading-spinner loading-sm" />
         <AppJarUpdateIcon v-if="!loading && props.submitIcon === 'JarUpdateIcon'" />
+        <AppShelfUpdateIcon v-if="!loading && props.submitIcon === 'ShelfUpdateIcon'" />
         <Icon
           v-if="!loading && props.submitIcon === 'tabler:plus'"
           name="tabler:plus"

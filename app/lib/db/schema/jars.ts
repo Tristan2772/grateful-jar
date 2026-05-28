@@ -14,8 +14,8 @@ export const jars = sqliteTable("jars", {
   name: text().notNull(),
   slug: text().notNull().unique(),
   description: text(),
-  shelf: int().references(() => shelves.id),
-  userId: int().notNull().references(() => user.id),
+  shelf: int().references(() => shelves.id, { onDelete: "set null" }),
+  userId: int().notNull().references(() => user.id, { onDelete: "cascade" }),
   createdAt: int().notNull().$default(() => Date.now()),
   updatedAt: int().notNull().$default(() => Date.now()).$onUpdate(() => Date.now()),
 }, t => [

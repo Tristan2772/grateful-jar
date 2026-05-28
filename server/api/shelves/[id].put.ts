@@ -13,10 +13,10 @@ export default defineAuthenticatedEventHandler(async (event) => {
 
   const existingShelf = await findShelfByName(result.data, event.context.user.id);
   if (existingShelf && existingShelf.id !== shelfId) {
-    return sendError(event, createError({
+    return createError({
       statusCode: 409,
       statusMessage: "A shelf with that name already exists",
-    }));
+    });
   }
 
   return updateShelfById(result.data, shelfId, event.context.user.id);

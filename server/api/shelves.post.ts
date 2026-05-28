@@ -23,19 +23,19 @@ export default defineAuthenticatedEventHandler(async (event) => {
         return errors;
       }, {} as Record<string, string>);
 
-    return sendError(event, createError({
+    return createError({
       statusCode: 422,
       statusMessage,
       data,
-    }));
+    });
   }
 
   const existingShelf = await findShelfByName(result.data, event.context.user.id);
   if (existingShelf) {
-    return sendError(event, createError({
+    return createError({
       statusCode: 409,
       statusMessage: "A shelf with that name already exists.",
-    }));
+    });
   }
 
   try {

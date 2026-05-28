@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
   debug: true,
+
   modules: [
     "@nuxt/eslint",
     "@nuxt/icon",
@@ -13,22 +14,28 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@vee-validate/nuxt",
     "nuxt-csurf",
+    "@sentry/nuxt/module",
   ],
+
   colorMode: {
     preference: "system",
     fallback: "light",
   },
+
   css: ["~/assets/css/main.css"],
+
   runtimeConfig: {
     public: {
       s3BucketUrl: env.S3_BUCKET_URL,
     },
   },
+
   eslint: {
     config: {
       standalone: false,
     },
   },
+
   vite: {
     optimizeDeps: {
       include: [
@@ -40,5 +47,15 @@ export default defineNuxtConfig({
     plugins: [
       tailwindcss(),
     ],
+  },
+
+  sentry: {
+    org: import.meta.env.SENTRY_ORG,
+    project: import.meta.env.SENTRY_PROJECT,
+    autoInjectServerSentry: "top-level-import",
+  },
+
+  sourcemap: {
+    client: "hidden",
   },
 });

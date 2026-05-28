@@ -10,26 +10,26 @@ export default defineAuthenticatedEventHandler(async (event) => {
   const jar = await findJar(slug, event.context.user.id);
 
   if (!jar) {
-    return sendError(event, createError({
+    return createError({
       statusCode: 404,
       statusMessage: "Jar not found.",
-    }));
+    });
   }
 
   if (!z.coerce.number().safeParse(id).success) {
-    return sendError(event, createError({
+    return createError({
       statusCode: 422,
       statusMessage: "Invalid Id.",
-    }));
+    });
   }
 
   const note = await findNote(Number(id), event.context.user.id);
 
   if (!note) {
-    return sendError(event, createError({
+    return createError({
       statusCode: 404,
       statusMessage: "Note not found.",
-    }));
+    });
   }
 
   return note;

@@ -13,10 +13,10 @@ export default defineAuthenticatedEventHandler(async (event) => {
 
   const existingNote = await findNoteByName(result.data, event.context.user.id);
   if (existingNote && existingNote.id !== noteId) {
-    return sendError(event, createError({
+    return createError({
       statusCode: 409,
       statusMessage: "A note with that name already exists",
-    }));
+    });
   }
 
   return updateNoteById(result.data, noteId, event.context.user.id);

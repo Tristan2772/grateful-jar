@@ -3,7 +3,7 @@ const colorMode = useColorMode();
 
 const isDark = computed({
   get() {
-    return colorMode.preference === "dark";
+    return colorMode.value === "dark";
   },
   set(value) {
     colorMode.preference = value ? "dark" : "light";
@@ -18,16 +18,10 @@ const isDark = computed({
 });
 
 onMounted(() => {
-  // Sync theme on initial load
-  if (import.meta.client) {
-    const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const isDarkMode = colorMode.preference === "dark"
-      || (colorMode.preference === "system" && systemPrefersDark);
-    document.documentElement.setAttribute(
-      "data-theme",
-      isDarkMode ? "night" : "winter",
-    );
-  }
+  document.documentElement.setAttribute(
+    "data-theme",
+    colorMode.value === "dark" ? "night" : "winter",
+  );
 });
 </script>
 

@@ -4,7 +4,7 @@ import { InsertShelf } from "~/lib/db/schema";
 const props = defineProps<{
   initialValues?: InsertShelf;
   submitLabel: string;
-  submitIcon: "JarUpdateIcon" | "tabler:plus";
+  submitIcon: "ShelfUpdateIcon" | "tabler:plus";
   onSubmit: (shelf: InsertShelf) => Promise<any>;
   onSubmitComplete: () => void;
 }>();

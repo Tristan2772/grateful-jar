@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { SelectShelf } from "~/lib/db/schema";
+
 const props = defineProps<{
   label: string;
   name: string;
@@ -7,9 +9,30 @@ const props = defineProps<{
   initialShelfId?: number | null;
 }>();
 
-const { value, handleChange } = useField(() => props.name);
+const { value, handleChange } = useField<number | null>(() => props.name);
 
 const shelvesStore = useShelvesStore();
+const { shelves } = storeToRefs(shelvesStore);
+
+function isShelf(value: unknown): value is SelectShelf {
+  return !!value
+    && typeof value === "object"
+    && "id" in value
+    && "name" in value;
+}
+
+const shelfOptions = computed<SelectShelf[]>(() => {
+  if (!Array.isArray(shelves.value)) {
+    return [];
+  }
+
+  return shelves.value.filter(isShelf);
+});
+
+function onSelectChange(event: Event) {
+  const target = event.target as HTMLSelectElement;
+  handleChange(target.value === "" ? null : Number(target.value));
+}
 </script>
 
 <template>
@@ -20,20 +43,17 @@ const shelvesStore = useShelvesStore();
     <select
       class="select"
       :value="value"
-      @change="(e: Event) => handleChange(
-        (e.target as HTMLSelectElement).value === ''
-          ? null
-          : Number((e.target as HTMLSelectElement).value),
-      )"
+      @change="onSelectChange"
     >
       <option value="">
         No Shelf
       </option>
+
       <option
-        v-for="shelf in shelvesStore.shelves"
+        v-for="shelf in shelfOptions"
         :key="shelf.id"
         :value="shelf.id"
-        :selected="initialShelfId === shelf.id"
+        :selected="props.initialShelfId === shelf.id"
       >
         {{ shelf.name }}
       </option>

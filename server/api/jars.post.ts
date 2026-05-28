@@ -6,6 +6,7 @@ import { InsertJar } from "~/lib/db/schema";
 import defineAuthenticatedEventHandler from "~/utils/define-authenticated-event-handler";
 
 import { findJarByName, findUniqueSlug, insertJar } from "../../app/lib/db/queries/jars";
+import { findShelfById } from "../../app/lib/db/queries/shelves";
 import sendZodError from "../../app/utils/send-zod-error";
 
 export default defineAuthenticatedEventHandler(async (event) => {
@@ -17,10 +18,20 @@ export default defineAuthenticatedEventHandler(async (event) => {
 
   const existingJar = await findJarByName(result.data, event.context.user.id);
   if (existingJar) {
-    return sendError(event, createError({
+    return createError({
       statusCode: 409,
       statusMessage: "A jar with that name already exists",
-    }));
+    });
+  }
+
+  if (typeof result.data.shelf === "number") {
+    const shelf = await findShelfById(result.data.shelf, event.context.user.id);
+    if (!shelf) {
+      return createError({
+        statusCode: 400,
+        statusMessage: "Invalid shelf selected",
+      });
+    }
   }
 
   const slug = await findUniqueSlug(slugify(result.data.name));
@@ -31,10 +42,10 @@ export default defineAuthenticatedEventHandler(async (event) => {
   catch (e) {
     const error = e as DrizzleError;
     if (error.message === "SQLITE_CONSTRAINT: SQLite error: UNIQUE constraint failed: jars.slug") {
-      return sendError(event, createError({
+      return createError({
         statusCode: 409,
         statusMessage: "Slug must be unique (the slug is generated using the jar name).",
-      }));
+      });
     }
     throw error;
   }

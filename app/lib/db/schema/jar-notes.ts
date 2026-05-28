@@ -15,8 +15,8 @@ export const jarNotes = sqliteTable("jarNotes", {
   description: text(),
   startedAt: int().notNull(),
   endedAt: int().notNull(),
-  jarId: int().notNull().references(() => jars.id),
-  userId: int().notNull().references(() => user.id),
+  jarId: int().notNull().references(() => jars.id, { onDelete: "cascade" }),
+  userId: int().notNull().references(() => user.id, { onDelete: "cascade" }),
   createdAt: int().notNull().$default(() => Date.now()),
   updatedAt: int().notNull().$default(() => Date.now()).$onUpdate(() => Date.now()),
 });
@@ -33,7 +33,10 @@ const BaseInsertJarNote = createInsertSchema(jarNotes, {
 });
 
 export const InsertJarNote = BaseInsertJarNote.superRefine((values, context) => {
-  if (values.startedAt > values.endedAt || values.endedAt < values.startedAt) {
+  const startedDate = new Date(values.startedAt).toISOString().slice(0, 10);
+  const endedDate = new Date(values.endedAt).toISOString().slice(0, 10);
+
+  if (startedDate > endedDate) {
     context.addIssue({
       code: "custom",
       message: "Start date must be before end date",
