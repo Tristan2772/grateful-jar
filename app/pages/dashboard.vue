@@ -139,7 +139,6 @@ effect(() => {
   <div class="w-full">
     <div class="flex h-full">
       <!-- --------------------------- side bar ----------------------------- -->
-
       <button
         v-if="sidebarStore.isSidebarOpen"
         type="button"
@@ -148,7 +147,12 @@ effect(() => {
         @click="sidebarStore.isSidebarOpen = false"
       />
 
-      <div class="bg-base-100 transition-all duration-300 top-16 fixed bottom-0 left-0 z-50 flex flex-col" :class="{ 'min-w-64 max-w-64': sidebarStore.isSidebarOpen, 'min-w-16 max-w-16': !sidebarStore.isSidebarOpen }">
+      <div
+        class="bg-base-100 transition-all duration-300 top-16 fixed bottom-0 left-0 z-50 flex flex-col"
+        :class="{ 'min-w-64 max-w-64': sidebarStore.isSidebarOpen, 'min-w-16 max-w-16': !sidebarStore.isSidebarOpen }"
+        @touchmove.stop
+        @wheel.stop
+      >
         <!-- ------------------------- top of Sidebar ------------------------------ -->
         <div
           class="flex p-2 rounded-lg hover:bg-base-300 hover:cursor-pointer shrink-0"
