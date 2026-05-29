@@ -46,7 +46,7 @@ const addJarTo = computed(() => {
             name: 'dashboard-jars-slug',
             params: { slug: jar.slug },
           }"
-          class="flex flex-col card-compact max-h-80 min-h-80 aspect-square rounded-full p-3 border-2 border-solid"
+          class="flex flex-col card-compact max-h-75 min-h-75 aspect-square rounded-full p-3 border-2 border-solid"
           :class="jarsStore.hoveredId === `jar-${jar.id}` ? 'border-primary bg-base-300' : 'bg-base-100' "
           @mouseenter="jarsStore.hoveredId = `jar-${jar.id}`"
           @mouseleave="jarsStore.hoveredId = ''"
