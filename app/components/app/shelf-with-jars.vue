@@ -53,7 +53,8 @@ const addJarTo = computed(() => {
           @mouseleave="jarsStore.hoveredId = ''"
         >
           <div class="flex flex-col pt-6 px-4 gap-2 text-center">
-            <h3 class="text-xl line-clamp-2 text-pretty relative min-h-14 jar-header">
+            <h3 class="text-xl line-clamp-2 text-pretty relative min-h-14">
+              <span aria-hidden="true" class="jar-header" />
               {{ jar.name }}
             </h3>
             <p class="text-md line-clamp-4 text-pretty">
@@ -94,13 +95,12 @@ const addJarTo = computed(() => {
 
 <style scoped>
 .jar-header::before {
-  content: "";
+  content: "______________________ _________________________";
+  color: gray;
   position: absolute;
   left: 0;
   right: 0;
   top: 2px;
-  height: 0.6rem;
-  background: repeating-linear-gradient(to right, gray 0, gray 0.5rem, transparent 0.5rem, transparent 0.75rem);
   pointer-events: none;
 }
 </style>
