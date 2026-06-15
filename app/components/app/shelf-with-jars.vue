@@ -95,8 +95,7 @@ const addJarTo = computed(() => {
 
 <style scoped>
 .jar-header::before {
-  content: "______________________ _________________________";
-  color: gray;
+  content: "";
   position: absolute;
   left: 0;
   right: 0;
