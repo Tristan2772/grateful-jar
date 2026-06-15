@@ -54,7 +54,7 @@ const addJarTo = computed(() => {
         >
           <div class="flex flex-col pt-6 px-4 gap-2 text-center">
             <h3 class="text-xl line-clamp-2 text-pretty relative min-h-14">
-              <span aria-hidden="true" class="jar-header" />
+              <span aria-hidden="true" class="jar-header">______________________ _________________________</span>
               {{ jar.name }}
             </h3>
             <p class="text-md line-clamp-4 text-pretty">
@@ -94,12 +94,12 @@ const addJarTo = computed(() => {
 </template>
 
 <style scoped>
-.jar-header::before {
-  content: "";
+.jar-header {
   position: absolute;
   left: 0;
   right: 0;
   top: 2px;
+  z-index: 20;
   pointer-events: none;
 }
 </style>
