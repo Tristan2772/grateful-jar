@@ -5,7 +5,8 @@ const props = defineProps<{
   isFirstShelf?: boolean;
   shelfId?: number;
 }>();
-
+const shelvesStore = useShelvesStore();
+const jarsStore = useJarsStore();
 const isOpen = ref(false);
 
 function openDialog() {
@@ -24,6 +25,8 @@ async function confirmDelete() {
     await $fetch(`/api/shelves/${props.shelfId}`, {
       method: "DELETE",
     });
+    shelvesStore.refresh();
+    jarsStore.allJarsRefresh();
     navigateTo("/dashboard");
   }
   catch (e) {
